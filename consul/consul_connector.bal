@@ -20,9 +20,6 @@ import ballerina/io;
 import ballerina/net.uri;
 import ballerina/mime;
 
-//Global Http Client
-http:HttpClient httpClientGlobal = {};
-
 //Consul Connector Struct
 public struct ConsulConnector {
     string uri;

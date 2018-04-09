@@ -29,9 +29,6 @@ public function main (string[] args) {
         clientConfig:{}
     };
 
-    // consul:ConsulConnector consul = {};
-    http:HttpConnectorError e = {};
-
     io:println("--------------Calling registerService----------------");
     json jsonPayload = {"ID":"redis", "Name":"redis1", "Address":"localhost", "port":8000, "EnableTagOverride":false};
     var serviceRegister = consulEP -> registerService(jsonPayload);
