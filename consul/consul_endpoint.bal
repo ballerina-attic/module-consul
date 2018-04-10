@@ -16,49 +16,34 @@
 
 package consul;
 
-import ballerina/net.http;
-
-@Description {value:"Struct to set the consul configuration."}
-public struct ConsulConfiguration {
-    string uri;
-    string aclToken;
-    http:ClientEndpointConfiguration clientConfig;
-}
+import ballerina/http;
 
 @Description {value:"Set the client configuration."}
 public function <ConsulConfiguration consulConfig> ConsulConfiguration () {
     consulConfig.clientConfig = {};
 }
 
-@Description {value:"Consul Endpoint struct."}
-public struct ConsulEndpoint {
-    ConsulConfiguration consulConfig;
-    ConsulConnector consulConnector;
-}
-
 @Description {value:"Initialize Consul endpoint."}
-public function <ConsulEndpoint ep> init (ConsulConfiguration consulConfig) {
-    ep.consulConnector = {
-                             uri:consulConfig.uri,
-                             aclToken:consulConfig.aclToken,
-                             httpClient:http:createHttpClient(consulConfig.uri, consulConfig.clientConfig)
-                         };
+@Param {value:"consulConfig:Configuration from Consul."}
+public function ConsulClient::init(ConsulConfiguration consulConfig) {
+    consulConnector.uri = consulConfig.uri;
+    consulConnector.aclToken = consulConfig.aclToken;
+    consulConfig.clientConfig.targets = [{url:consulConfig.uri}];
+    consulConnector.clientEndpoint.init(consulConfig.clientConfig);
 }
 
-public function <ConsulConnector ep> register (typedesc serviceType) {
+@Description {value:"Returns the connector that client code uses"}
+@Return {value:"The connector that client code uses"}
+function ConsulClient::getClient() returns ConsulConnector {
+    return consulConnector;
 }
 
-public function <ConsulConnector ep> start () {
-}
+@Description {value:"Start Consul connector endpoint."}
+public function ConsulClient::start() {}
 
-@Description {value:"Returns the connector that client code uses."}
-@Return {value:"The connector that client code uses."}
-public function <ConsulEndpoint ep> getClient () returns ConsulConnector {
-    return ep.consulConnector;
-}
+@Description {value:"Stop Consul connector endpoint."}
+public function ConsulClient::stop() {}
 
-@Description {value:"Stops the registered service"}
-@Return {value:"Error occured during registration"}
-public function <ConsulEndpoint ep> stop () {
-}
-
+@Description {value:"Register Consul connector endpoint."}
+@Param {value:"typedesc: Accepts types of data (int, float, string, boolean, etc)"}
+public function ConsulClient::register(typedesc serviceType) {}
