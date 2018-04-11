@@ -20,60 +20,89 @@ import ballerina/http;
 import ballerina/util;
 import ballerina/io;
 
-@Description {value:"Struct to initialize the connection with SonarQube."}
 public type ConsulConnector object {
     public {
        string uri;
        string aclToken;
        http:Client clientEndpoint = new;
     }
+
+    documentation {Get the details of a particular service
+        P{{serviceName}} The name of the service
+        returns CatalogService Object or Error occured during HTTP client invocation.}
     public function getService(string serviceName) returns (CatalogService[]|ConsulError);
+
+    documentation {Get the details of the  passing/critical state checks
+        P{{state}} The state of the checks
+        returns HealthCheck Object or Error occured during HTTP client invocation.}
     public function getCheckByState(string state) returns (HealthCheck[]|ConsulError);
+
+    documentation {Get the details of a particular key
+        P{{key}} The path of the key to read
+        returns Value Object or Error occured during HTTP client invocation.}
     public function readKey(string key) returns (Value[]|ConsulError);
+
+    documentation {Register the service
+        P{{jsonPayload}} The details of the service
+        returns boolean or Error occured during HTTP client invocation.}
     public function registerService (json jsonPayload) returns (boolean|ConsulError);
+
+    documentation {Register the check
+        P{{jsonPayload}} The details of the check
+        returns boolean or Error occured during HTTP client invocation.}
     public function registerCheck (json jsonPayload) returns (boolean|ConsulError);
+
+    documentation {Create the key
+        P{{keyName}} name of the key
+        P{{value}} value of the key
+        returns boolean or Error occured during HTTP client invocation.}
     public function createKey (string keyName, string value) returns (boolean|ConsulError);
 };
 
-@Description {value:"Consul Endpoint struct."}
-@Field {value: "consulConfig: Consul connector configurations"}
-@Field {value: "consulConnector: Consul Connector object"}
+documentation {Consul Client object
+    F{{consulConfig}} Consul connector configurations
+    F{{consulConnector}} Consul Connector object
+}
 public type ConsulClient object {
     public {
         ConsulConfiguration consulConfig = {};
         ConsulConnector consulConnector = new;
     }
 
-    @Description {value: "Consul connector endpoint initialization function"}
-    @Param {value: "ConsulConfiguration: Consul connector configuration"}
+    documentation {Consul connector endpoint initialization function
+        P{{consulConfig}} Consul connector configuration
+    }
     public function init (ConsulConfiguration consulConfig);
 
-    @Description {value: "Register Consul connector endpoint"}
-    @Param {value: "typedesc: Accepts types of data (int, float, string, boolean, etc)"}
+    documentation {Register Consul connector endpoint
+        P{{serviceType}} Accepts types of data (int, float, string, boolean, etc)
+    }
     public function register (typedesc serviceType);
 
-    @Description {value: "Start Consul connector endpoint"}
+    documentation {Start Consul connector endpoint}
     public function start ();
 
-    @Description {value: "Return the Consul connector client"}
-    @Return {value: "Consul connector client"}
+    documentation {Return the Consul connector client
+        returns Consul connector client
+    }
     public function getClient () returns ConsulConnector;
 
-    @Description {value: "Stop Consul connector client"}
+    documentation {Stop Consul connector client}
     public function stop ();
 };
 
-@Description {value:"Struct to set the Consul configuration."}
-@Field {value: "uri: The Consul API URL"}
-@Field {value: "aclToken: The acl token consul agent"}
-@Field {value: "clientConfig: Client endpoint configurations provided by the user"}
+documentation {Consul connector configurations can be setup here
+    F{{uri}} The Consul API URL
+    F{{aclToken}} The acl token consul agent
+    F{{clientConfig}} Client endpoint configurations provided by the user
+}
 public type ConsulConfiguration {
     string uri;
     string aclToken;
     http:ClientEndpointConfig clientConfig;
 };
 
-@Description {value:"Struct to define the CatalogService."}
+documentation {value:"Struct to define the CatalogService."}
 public type CatalogService {
     string id;
     string node;
@@ -91,7 +120,7 @@ public type CatalogService {
     int modifyIndex;
 };
 
-@Description {value:"Struct to define the HealthCheck."}
+documentation {value:"Struct to define the HealthCheck."}
 public type HealthCheck {
     string node;
     string checkId;
@@ -107,7 +136,7 @@ public type HealthCheck {
     int modifyIndex;
 };
 
-@Description {value:"Struct to define the Value."}
+documentation {value:"Struct to define the Value."}
 public type Value {
     int lockIndex;
     string key;
@@ -117,7 +146,7 @@ public type Value {
     int modifyIndex;
 };
 
-@Description {value:"Struct to define the error."}
+documentation {value:"Struct to define the error."}
 public type ConsulError {
     int statusCode;
     string errorMessage;
