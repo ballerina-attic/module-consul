@@ -53,11 +53,11 @@ public function ConsulConnector::getService (string serviceName) returns Catalog
                                                 { () => "" };
                                             consulError.statusCode = statusCode;
                                             return consulError;
+                                            }
                                         }
                                     }
         }
     }
-}
 }
 
 public function ConsulConnector::getCheckByState (string state) returns HealthCheck[]|
@@ -93,13 +93,13 @@ public function ConsulConnector::getCheckByState (string state) returns HealthCh
                                             } else {
                                                 consulError.errorMessage = jsonResponse.error.message.toString() but
                                                 { () => "" };
-                                            consulError.statusCode = statusCode;
-                                            return consulError;
+                                                consulError.statusCode = statusCode;
+                                                return consulError;
+                                            }
                                         }
                                     }
         }
     }
-}
 }
 
 public function ConsulConnector::readKey (string key) returns Value[]|
@@ -137,11 +137,11 @@ public function ConsulConnector::readKey (string key) returns Value[]|
                                                 { () => "" };
                                             consulError.statusCode = statusCode;
                                             return consulError;
+                                            }
                                         }
                                     }
         }
     }
-}
 }
 
 public function ConsulConnector::registerService (json jsonPayload) returns boolean|
@@ -177,12 +177,12 @@ public function ConsulConnector::registerService (json jsonPayload) returns bool
                                                 { () => "" };
                                             consulError.statusCode = statusCode;
                                         return consulError;
+                                            }
+                                        }
                                     }
         }
-    }
-}
 
-}
+    }
 }
 
 public function ConsulConnector::registerCheck (json jsonPayload) returns boolean|
@@ -216,13 +216,13 @@ public function ConsulConnector::registerCheck (json jsonPayload) returns boolea
                                             json jsonResponse => {
                                                 consulError.errorMessage = jsonResponse.error.message.toString() but
                                                 { () => "" };
-                                            consulError.statusCode = statusCode;
-                                        return consulError;
+                                                consulError.statusCode = statusCode;
+                                                return consulError;
+                                            }
+                                        }
                                     }
         }
     }
-}
-}
 }
 
 public function ConsulConnector::createKey (string keyName, string value) returns boolean|
@@ -256,11 +256,11 @@ public function ConsulConnector::createKey (string keyName, string value) return
                                             json jsonResponse => {
                                                 consulError.errorMessage = jsonResponse.error.message.toString() but {
                                                 () => "" };
-                                            consulError.statusCode = statusCode;
-                                        return consulError;
+                                                consulError.statusCode = statusCode;
+                                                return consulError;
+                                            }
+                                        }
                                     }
         }
     }
-}
-}
 }
