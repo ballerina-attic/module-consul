@@ -16,8 +16,47 @@
 
 package consul;
 
+import ballerina/http;
+import ballerina/util;
+import ballerina/io;
+
+@Description {value:"Struct to initialize the connection with SonarQube."}
+public type ConsulConnector object {
+    public {
+       string uri;
+       string aclToken;
+       http:Client clientEndpoint = new;
+    }
+    public function getService(string serviceName) returns (CatalogService[]|ConsulError);
+    public function getCheckByState(string state) returns (HealthCheck[]|ConsulError);
+    public function readKey(string key) returns (Value[]|ConsulError);
+    public function registerService (json jsonPayload) returns (boolean|ConsulError);
+    public function registerCheck (json jsonPayload) returns (boolean|ConsulError);
+    public function createKey (string keyName, string value) returns (boolean|ConsulError);
+};
+
+@Description {value:"Consul client struct."}
+public type ConsulClient object {
+    public {
+        ConsulConfiguration consulConfig = {};
+        ConsulConnector consulConnector = new;
+    }
+    public function init (ConsulConfiguration consulConfig);
+    public function register (typedesc serviceType);
+    public function start ();
+    public function getClient () returns ConsulConnector;
+    public function stop ();
+};
+
+@Description {value:"Struct to set the Consul configuration."}
+public type ConsulConfiguration {
+    string uri;
+    string aclToken;
+    http:ClientEndpointConfiguration clientConfig;
+};
+
 @Description {value:"Struct to define the CatalogService."}
-public struct CatalogService {
+public type CatalogService {
     string id;
     string node;
     string address;
@@ -32,10 +71,10 @@ public struct CatalogService {
     boolean serviceEnableTagOverride;
     int createIndex;
     int modifyIndex;
-}
+};
 
 @Description {value:"Struct to define the HealthCheck."}
-public struct HealthCheck {
+public type HealthCheck {
     string node;
     string checkId;
     string name;
@@ -48,20 +87,20 @@ public struct HealthCheck {
     string definition;
     int createIndex;
     int modifyIndex;
-}
+};
 
 @Description {value:"Struct to define the CattalogServiceList."}
-public struct Value {
+public type Value {
     int lockIndex;
     string key;
     int flags;
     string value;
     int createIndex;
     int modifyIndex;
-}
+};
 
 @Description {value:"Struct to define the error."}
-public struct ConsulError {
+public type ConsulError {
     int statusCode;
     string errorMessage;
-}
+};

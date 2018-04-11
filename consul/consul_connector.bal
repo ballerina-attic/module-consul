@@ -17,27 +17,19 @@
 package consul;
 
 import ballerina/io;
-import ballerina/net.uri;
 import ballerina/mime;
 
-//Consul Connector Struct
-public struct ConsulConnector {
-    string uri;
-    string aclToken;
-    http:HttpClient httpClient;
-}
-
-public function <ConsulConnector consulConnector> getService (string serviceName) returns CatalogService[]|ConsulError {
+public function ConsulConnector::getService (string serviceName) returns CatalogService[]|ConsulError {
+    endpoint http:Client clientEndpoint = self.clientEndpoint;
     ConsulError consulError = {};
-    string aclToken = consulConnector.aclToken;
     string consulPath = "/v1/catalog/service/" + serviceName;
 
-    http:Request request = {};
-    if (consulConnector.aclToken != "") {
+    http:Request request;
+    if (aclToken != "") {
         request.setHeader("X-Consul-Token", aclToken);
     }
 
-    var httpResponse = consulConnector.httpClient.get(consulPath, request);
+    var httpResponse = clientEndpoint -> get(consulPath, request);
     CatalogService[] serviceResponse = [];
 
     match httpResponse {
@@ -57,28 +49,29 @@ public function <ConsulConnector consulConnector> getService (string serviceName
                                                 serviceResponse = convertToCatalogServices(jsonResponse);
                                                 return serviceResponse;
                                             } else {
-                                                consulError.errorMessage = jsonResponse.error.message.toString();
-                                                consulError.statusCode = statusCode;
-                                                return consulError;
-                                            }
+                                                consulError.errorMessage = jsonResponse.error.message.toString() but
+                                                { () => "" };
+                                            consulError.statusCode = statusCode;
+                                            return consulError;
                                         }
                                     }
         }
     }
 }
+}
 
-public function <ConsulConnector consulConnector> getCheckByState (string state) returns HealthCheck[]|
-                                                                                         ConsulError {
+public function ConsulConnector::getCheckByState (string state) returns HealthCheck[]|
+                                                                        ConsulError {
+    endpoint http:Client clientEndpoint = self.clientEndpoint;
     ConsulError consulError = {};
-    string aclToken = consulConnector.aclToken;
     string consulPath = "/v1/health/state/" + state;
 
-    http:Request request = {};
-    if (consulConnector.aclToken != "") {
+    http:Request request;
+    if (aclToken != "") {
         request.setHeader("X-Consul-Token", aclToken);
     }
 
-    var httpResponse = consulConnector.httpClient.get(consulPath, request);
+    var httpResponse = clientEndpoint -> get(consulPath, request);
     HealthCheck[] checkResponse = [];
 
     match httpResponse {
@@ -98,28 +91,29 @@ public function <ConsulConnector consulConnector> getCheckByState (string state)
                                                 checkResponse = convertToHealthClients(jsonResponse);
                                                 return checkResponse;
                                             } else {
-                                                consulError.errorMessage = jsonResponse.error.message.toString();
-                                                consulError.statusCode = statusCode;
-                                                return consulError;
-                                            }
+                                                consulError.errorMessage = jsonResponse.error.message.toString() but
+                                                { () => "" };
+                                            consulError.statusCode = statusCode;
+                                            return consulError;
                                         }
                                     }
         }
     }
 }
+}
 
-public function <ConsulConnector consulConnector> readKey (string key) returns Value[]|
-                                                                               ConsulError {
+public function ConsulConnector::readKey (string key) returns Value[]|
+                                                              ConsulError {
+    endpoint http:Client clientEndpoint = self.clientEndpoint;
     ConsulError consulError = {};
-    string aclToken = consulConnector.aclToken;
     string consulPath = "/v1/kv/" + key;
 
-    http:Request request = {};
-    if (consulConnector.aclToken != "") {
+    http:Request request;
+    if (aclToken != "") {
         request.setHeader("X-Consul-Token", aclToken);
     }
 
-    var httpResponse = consulConnector.httpClient.get(consulPath, request);
+    var httpResponse = clientEndpoint -> get(consulPath, request);
     Value[] keyResponse = [];
 
     match httpResponse {
@@ -139,28 +133,29 @@ public function <ConsulConnector consulConnector> readKey (string key) returns V
                                                 keyResponse = convertToValues(jsonResponse);
                                                 return keyResponse;
                                             } else {
-                                                consulError.errorMessage = jsonResponse.error.message.toString();
-                                                consulError.statusCode = statusCode;
-                                                return consulError;
-                                            }
+                                                consulError.errorMessage = jsonResponse.error.message.toString() but
+                                                { () => "" };
+                                            consulError.statusCode = statusCode;
+                                            return consulError;
                                         }
                                     }
         }
     }
 }
+}
 
-public function <ConsulConnector consulConnector> registerService (json jsonPayload) returns boolean|
-                                                                                             ConsulError {
+public function ConsulConnector::registerService (json jsonPayload) returns boolean|
+                                                                            ConsulError {
+    endpoint http:Client clientEndpoint = self.clientEndpoint;
     ConsulError consulError = {};
-    string aclToken = consulConnector.aclToken;
     string consulPath = "/v1/agent/service/register";
 
-    http:Request request = {};
-    if (consulConnector.aclToken != "") {
+    http:Request request;
+    if (aclToken != "") {
         request.setHeader("X-Consul-Token", aclToken);
     }
     request.setJsonPayload(jsonPayload);
-    var httpResponse = consulConnector.httpClient.put(consulPath, request);
+    var httpResponse = clientEndpoint -> put(consulPath, request);
 
     match httpResponse {
         http:HttpConnectorError err => { consulError.errorMessage = err.message;
@@ -178,29 +173,30 @@ public function <ConsulConnector consulConnector> registerService (json jsonPayl
                                                 return consulError;
                                             }
                                             json jsonResponse => {
-                                                consulError.errorMessage = jsonResponse.error.message.toString();
-                                                consulError.statusCode = statusCode;
-                                                return consulError;
-                                            }
-                                        }
+                                                consulError.errorMessage = jsonResponse.error.message.toString() but
+                                                { () => "" };
+                                            consulError.statusCode = statusCode;
+                                        return consulError;
                                     }
         }
-
     }
 }
 
-public function <ConsulConnector consulConnector> registerCheck (json jsonPayload) returns boolean|
-                                                                                           ConsulError {
+}
+}
+
+public function ConsulConnector::registerCheck (json jsonPayload) returns boolean|
+                                                                          ConsulError {
+    endpoint http:Client clientEndpoint = self.clientEndpoint;
     ConsulError consulError = {};
-    string aclToken = consulConnector.aclToken;
     string consulPath = "/v1/agent/check/register";
 
-    http:Request request = {};
-    if (consulConnector.aclToken != "") {
+    http:Request request;
+    if (aclToken != "") {
         request.setHeader("X-Consul-Token", aclToken);
     }
     request.setJsonPayload(jsonPayload);
-    var httpResponse = consulConnector.httpClient.put(consulPath, request);
+    var httpResponse = clientEndpoint -> put(consulPath, request);
 
     match httpResponse {
         http:HttpConnectorError err => { consulError.errorMessage = err.message;
@@ -218,28 +214,29 @@ public function <ConsulConnector consulConnector> registerCheck (json jsonPayloa
                                                 return consulError;
                                             }
                                             json jsonResponse => {
-                                                consulError.errorMessage = jsonResponse.error.message.toString();
-                                                consulError.statusCode = statusCode;
-                                                return consulError;
-                                            }
-                                        }
+                                                consulError.errorMessage = jsonResponse.error.message.toString() but
+                                                { () => "" };
+                                            consulError.statusCode = statusCode;
+                                        return consulError;
                                     }
         }
     }
 }
+}
+}
 
-public function <ConsulConnector consulConnector> createKey (string keyName, string value) returns boolean|
-                                                                                                   ConsulError {
+public function ConsulConnector::createKey (string keyName, string value) returns boolean|
+                                                                                  ConsulError {
+    endpoint http:Client clientEndpoint = self.clientEndpoint;
     ConsulError consulError = {};
-    string aclToken = consulConnector.aclToken;
     string consulPath = "/v1/kv/" + keyName;
 
-    http:Request request = {};
-    if (consulConnector.aclToken != "") {
+    http:Request request;
+    if (aclToken != "") {
         request.setHeader("X-Consul-Token", aclToken);
     }
     request.setJsonPayload(value);
-    var httpResponse = consulConnector.httpClient.put(consulPath, request);
+    var httpResponse = clientEndpoint -> put(consulPath, request);
 
     match httpResponse {
         http:HttpConnectorError err => { consulError.errorMessage = err.message;
@@ -257,12 +254,13 @@ public function <ConsulConnector consulConnector> createKey (string keyName, str
                                                 return consulError;
                                             }
                                             json jsonResponse => {
-                                                consulError.errorMessage = jsonResponse.error.message.toString();
-                                                consulError.statusCode = statusCode;
-                                                return consulError;
-                                            }
-                                        }
+                                                consulError.errorMessage = jsonResponse.error.message.toString() but {
+                                                () => "" };
+                                            consulError.statusCode = statusCode;
+                                        return consulError;
                                     }
         }
     }
+}
+}
 }
