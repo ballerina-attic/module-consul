@@ -26,16 +26,16 @@ public function <ConsulConfiguration consulConfig> ConsulConfiguration () {
 @Description {value:"Initialize Consul endpoint."}
 @Param {value:"consulConfig:Configuration from Consul."}
 public function ConsulClient::init(ConsulConfiguration consulConfig) {
-    consulConnector.uri = consulConfig.uri;
-    consulConnector.aclToken = consulConfig.aclToken;
+    self.consulConnector.uri = consulConfig.uri;
+    self.consulConnector.aclToken = consulConfig.aclToken;
     consulConfig.clientConfig.targets = [{url:consulConfig.uri}];
-    consulConnector.clientEndpoint.init(consulConfig.clientConfig);
+    self.consulConnector.clientEndpoint.init(consulConfig.clientConfig);
 }
 
 @Description {value:"Returns the connector that client code uses"}
 @Return {value:"The connector that client code uses"}
 function ConsulClient::getClient() returns ConsulConnector {
-    return consulConnector;
+    return self.consulConnector;
 }
 
 @Description {value:"Start Consul connector endpoint."}

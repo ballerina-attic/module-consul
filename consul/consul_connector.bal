@@ -19,6 +19,9 @@ package consul;
 import ballerina/io;
 import ballerina/mime;
 
+@Description{ value : "Get the details of a particular service"}
+@Param{ value : "serviceName: The name of the service"}
+@Return{ value : "CatalogService Object or Error occured during HTTP client invocation."}
 public function ConsulConnector::getService (string serviceName) returns CatalogService[]|ConsulError {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
     ConsulError consulError = {};
@@ -53,13 +56,16 @@ public function ConsulConnector::getService (string serviceName) returns Catalog
                                                 { () => "" };
                                             consulError.statusCode = statusCode;
                                             return consulError;
+                                            }
                                         }
                                     }
         }
     }
 }
-}
 
+@Description{ value : "Get the details of the  passing/critical state checks"}
+@Param{ value : "state: The state of the checks"}
+@Return{ value : "HealthCheck Object or Error occured during HTTP client invocation."}
 public function ConsulConnector::getCheckByState (string state) returns HealthCheck[]|
                                                                         ConsulError {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
@@ -93,15 +99,18 @@ public function ConsulConnector::getCheckByState (string state) returns HealthCh
                                             } else {
                                                 consulError.errorMessage = jsonResponse.error.message.toString() but
                                                 { () => "" };
-                                            consulError.statusCode = statusCode;
-                                            return consulError;
+                                                consulError.statusCode = statusCode;
+                                                return consulError;
+                                            }
                                         }
                                     }
         }
     }
 }
-}
 
+@Description{ value : "Get the details of a particular key"}
+@Param{ value : "key: The path of the key to read"}
+@Return{ value : "Value Object or Error occured during HTTP client invocation."}
 public function ConsulConnector::readKey (string key) returns Value[]|
                                                               ConsulError {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
@@ -137,13 +146,16 @@ public function ConsulConnector::readKey (string key) returns Value[]|
                                                 { () => "" };
                                             consulError.statusCode = statusCode;
                                             return consulError;
+                                            }
                                         }
                                     }
         }
     }
 }
-}
 
+@Description{ value : "Register the service"}
+@Param{ value : "jsonPayload: The details of the service"}
+@Return{ value : "Boolean or Error occured during HTTP client invocation."}
 public function ConsulConnector::registerService (json jsonPayload) returns boolean|
                                                                             ConsulError {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
@@ -177,14 +189,17 @@ public function ConsulConnector::registerService (json jsonPayload) returns bool
                                                 { () => "" };
                                             consulError.statusCode = statusCode;
                                         return consulError;
+                                            }
+                                        }
                                     }
         }
+
     }
 }
 
-}
-}
-
+@Description{ value : "Register the check"}
+@Param{ value : "jsonPayload: The details of the check"}
+@Return{ value : "Boolean or Error occured during HTTP client invocation."}
 public function ConsulConnector::registerCheck (json jsonPayload) returns boolean|
                                                                           ConsulError {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
@@ -216,15 +231,18 @@ public function ConsulConnector::registerCheck (json jsonPayload) returns boolea
                                             json jsonResponse => {
                                                 consulError.errorMessage = jsonResponse.error.message.toString() but
                                                 { () => "" };
-                                            consulError.statusCode = statusCode;
-                                        return consulError;
+                                                consulError.statusCode = statusCode;
+                                                return consulError;
+                                            }
+                                        }
                                     }
         }
     }
 }
-}
-}
 
+@Description{ value : "Create the key"}
+@Param{ value : "keyName: name of the key, value: value of the key"}
+@Return{ value : "Boolean or Error occured during HTTP client invocation."}
 public function ConsulConnector::createKey (string keyName, string value) returns boolean|
                                                                                   ConsulError {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
@@ -256,11 +274,11 @@ public function ConsulConnector::createKey (string keyName, string value) return
                                             json jsonResponse => {
                                                 consulError.errorMessage = jsonResponse.error.message.toString() but {
                                                 () => "" };
-                                            consulError.statusCode = statusCode;
-                                        return consulError;
+                                                consulError.statusCode = statusCode;
+                                                return consulError;
+                                            }
+                                        }
                                     }
         }
     }
-}
-}
 }

@@ -35,24 +35,42 @@ public type ConsulConnector object {
     public function createKey (string keyName, string value) returns (boolean|ConsulError);
 };
 
-@Description {value:"Consul client struct."}
+@Description {value:"Consul Endpoint struct."}
+@Field {value: "consulConfig: Consul connector configurations"}
+@Field {value: "consulConnector: Consul Connector object"}
 public type ConsulClient object {
     public {
         ConsulConfiguration consulConfig = {};
         ConsulConnector consulConnector = new;
     }
+
+    @Description {value: "Consul connector endpoint initialization function"}
+    @Param {value: "ConsulConfiguration: Consul connector configuration"}
     public function init (ConsulConfiguration consulConfig);
+
+    @Description {value: "Register Consul connector endpoint"}
+    @Param {value: "typedesc: Accepts types of data (int, float, string, boolean, etc)"}
     public function register (typedesc serviceType);
+
+    @Description {value: "Start Consul connector endpoint"}
     public function start ();
+
+    @Description {value: "Return the Consul connector client"}
+    @Return {value: "Consul connector client"}
     public function getClient () returns ConsulConnector;
+
+    @Description {value: "Stop Consul connector client"}
     public function stop ();
 };
 
 @Description {value:"Struct to set the Consul configuration."}
+@Field {value: "uri: The Consul API URL"}
+@Field {value: "aclToken: The acl token consul agent"}
+@Field {value: "clientConfig: Client endpoint configurations provided by the user"}
 public type ConsulConfiguration {
     string uri;
     string aclToken;
-    http:ClientEndpointConfiguration clientConfig;
+    http:ClientEndpointConfig clientConfig;
 };
 
 @Description {value:"Struct to define the CatalogService."}
@@ -89,7 +107,7 @@ public type HealthCheck {
     int modifyIndex;
 };
 
-@Description {value:"Struct to define the CattalogServiceList."}
+@Description {value:"Struct to define the Value."}
 public type Value {
     int lockIndex;
     string key;
