@@ -148,7 +148,7 @@ public type Value {
 
 documentation {value:"Struct to define the error."}
 public type ConsulError {
-    int statusCode;
     string message;
     error? cause;
+    int statusCode;
 };
