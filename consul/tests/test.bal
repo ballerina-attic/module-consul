@@ -20,10 +20,10 @@ import ballerina/test;
 import ballerina/config;
 import ballerina/io;
 
-string uri = config:getAsString("URI") but { () => "" };
-string aclToken = config:getAsString("ACL_TOKEN") but { () => "" };
+string uri = config:getAsString("URI");
+string aclToken = config:getAsString("ACL_TOKEN");
 
-endpoint ConsulClient consulClient {
+endpoint Client consulClient {
     uri:uri,
     aclToken:aclToken,
     clientConfig:{}
@@ -33,17 +33,8 @@ endpoint ConsulClient consulClient {
 function testRegisterService () {
     io:println("--------------Calling registerService----------------");
     json jsonPayload = {"ID":"redis", "Name":"redis1", "Address":"localhost", "port":8000, "EnableTagOverride":false};
-    var serviceRegister = consulClient -> registerService(jsonPayload);
-
-    match serviceRegister {
-        boolean response => {
-            test:assertEquals(response, true, msg = "Failed to call registerService()");
-        }
-        ConsulError err => {
-            io:println(err.errorMessage);
-            test:assertFail(msg = err.errorMessage);
-        }
-    }
+    boolean serviceRegister = check consulClient -> registerService (jsonPayload);
+    test:assertEquals(serviceRegister, true, msg = "Failed to call registerService()");
 }
 
 @test:Config {
@@ -52,17 +43,8 @@ function testRegisterService () {
 function testGetService () {
     io:println("--------------Calling getService----------------");
     string serviceName = "redis1";
-    var serviceDetails = consulClient -> getService(serviceName);
-
-    match serviceDetails {
-        CatalogService[] response => {
-            test:assertNotEquals(response, null, msg = "Failed to call getService()");
-        }
-        ConsulError err => {
-            io:println(err.errorMessage);
-            test:assertFail(msg = err.errorMessage);
-        }
-    }
+    CatalogService[] serviceDetails = check consulClient -> getService(serviceName);
+    test:assertNotEquals(serviceDetails, null, msg = "Failed to call getService()");
 }
 
 @test:Config
@@ -76,17 +58,8 @@ function testRegisterCheck () {
                          "Header":{"x-foo":["bar", "baz"]},
                          "Interval":"10s",
                          "TLSSkipVerify":true};
-    var checkRegister = consulClient -> registerCheck(jsonCheck);
-
-    match checkRegister {
-        boolean response => {
-            test:assertEquals(response, true, msg = "Failed to call registerCheck()");
-        }
-        ConsulError err => {
-            io:println(err.errorMessage);
-            test:assertFail(msg = err.errorMessage);
-        }
-    }
+    boolean checkRegister = check consulClient -> registerCheck(jsonCheck);
+    test:assertEquals(checkRegister, true, msg = "Failed to call registerCheck()");
 }
 
 
@@ -96,16 +69,8 @@ function testRegisterCheck () {
 function testGetCheckByState () {
     io:println("--------------Calling getCheckByState----------------");
     string state = "passing";
-    var checkDetails = consulClient -> getCheckByState(state);
-
-    match checkDetails {
-        HealthCheck[] response => {
-            test:assertNotEquals(response, null, msg = "Failed to call getCheckByState()");
-        }
-        ConsulError err => {
-            test:assertFail(msg = err.errorMessage);
-        }
-    }
+    HealthCheck[] checkDetails = check consulClient -> getCheckByState(state);
+    test:assertNotEquals(checkDetails, null, msg = "Failed to call getCheckByState()");
 }
 
 @test:Config
@@ -113,17 +78,8 @@ function testCreateKey () {
     io:println("--------------Calling createKey----------------");
     string keyName = "foo";
     string value = "bar";
-    var keyRegister = consulClient -> createKey(keyName, value);
-
-    match keyRegister {
-        boolean response => {
-            test:assertEquals(response, true, msg = "Failed to call createKey()");
-        }
-        ConsulError err => {
-            io:println(err.errorMessage);
-            test:assertFail(msg = err.errorMessage);
-        }
-    }
+    boolean keyRegister = check consulClient -> createKey(keyName, value);
+    test:assertEquals(keyRegister, true, msg = "Failed to call createKey()");
 }
 
 @test:Config {
@@ -132,14 +88,6 @@ function testCreateKey () {
 function testReadKey () {
     io:println("--------------Calling readKey----------------");
     string key = "foo";
-    var keyValue = consulClient -> readKey(key);
-
-    match keyValue {
-        Value[] response => {
-            test:assertNotEquals(response, null, msg = "Failed to call readKey()");
-        }
-        ConsulError err => {
-            test:assertFail(msg = err.errorMessage);
-        }
-    }
+    Value[] keyValue = check consulClient -> readKey(key);
+    test:assertNotEquals(keyValue, null, msg = "Failed to call readKey()");
 }
