@@ -25,7 +25,7 @@ The following sections provide you with information on how to use the Ballerina 
 1. Create a Consul endpoint.
 
 ```ballerina
-   endpoint ConsulClient consulClient {
+   endpoint Client consulClient {
        uri:"uri",
        aclToken:"acl token",
        clientConfig:{}
@@ -35,89 +35,42 @@ The following sections provide you with information on how to use the Ballerina 
 2. Register service.
 
 ```ballerina
-    var serviceRegister = consulClient -> registerService(jsonPayload);
-    match serviceRegister {
-         boolean response => {
-             test:assertEquals(response, true, msg = "Failed to call registerService()");
-         }
-         ConsulError err => {
-             io:println(err.errorMessage);
-             test:assertFail(msg = err.errorMessage);
-         }
-    }
+   boolean serviceRegister = check consulClient -> registerService (jsonPayload);
+   test:assertEquals(serviceRegister, true, msg = "Failed to call registerService()");
+   }
 ```
      
 3. Retrieve the details of a given service.
 
 ```ballerina
-    var serviceDetails = consulClient -> getService(serviceName);
-    match serviceDetails {
-        CatalogService[] response => {
-        test:assertNotEquals(response, null, msg = "Failed to call getService()");
-        }
-    ConsulError err => {
-        io:println(err.errorMessage);
-        test:assertFail(msg = err.errorMessage);
-        }
-    }
+    CatalogService[] serviceDetails = check consulClient -> getService(serviceName);
+    test:assertNotEquals(serviceDetails, null, msg = "Failed to call getService()");
 ```
 
 4. Register check.
 
 ```ballerina
-    var checkRegister = consulClient -> registerCheck(jsonCheck);
-    match checkRegister {
-        boolean response => {
-            test:assertEquals(response, true, msg = "Failed to call registerCheck()");
-        }
-        ConsulError err => {
-            io:println(err.errorMessage);
-            test:assertFail(msg = err.errorMessage);
-        }
-    }
+    boolean checkRegister = check consulClient -> registerCheck(jsonCheck);
+    test:assertEquals(checkRegister, true, msg = "Failed to call registerCheck()");
 ```
 
 5. Get the details of the  passing/critical state checks
 
 ```ballerina
-    var checkDetails = consulClient -> getCheckByState (state);
-    match checkDetails {
-        HealthCheck[] response => {
-            test:assertNotEquals(response, null, msg = "Failed to call getCheckByState()");
-        }
-        ConsulError err => {
-            io:println(err.errorMessage);
-            test:assertFail(msg = err.errorMessage);
-        }
-    }
+    HealthCheck[] checkDetails = check consulClient -> getCheckByState(state);
+    test:assertNotEquals(checkDetails, null, msg = "Failed to call getCheckByState()");
 ```
 
 6. Create Key.
 
 ```ballerina
-     var keyRegister = consulClient -> createKey(keyName, value);
-     match keyRegister {
-         boolean response => {
-            test:assertEquals(response, true, msg = "Failed to call createKey()");
-         }
-         ConsulError err => {
-            io:println(err.errorMessage);
-            test:assertFail(msg = err.errorMessage);
-         }
-     }
+     boolean keyRegister = check consulClient -> createKey(keyName, value);
+     test:assertEquals(keyRegister, true, msg = "Failed to call createKey()");
 ``` 
 
 7.  Read key.
 
 ```ballerina
-    var keyValue = consulClient -> readKey (key);
-    match keyValue {
-        Value[] response => {
-            test:assertNotEquals(response, null, msg = "Failed to call readKey()");
-        }
-        ConsulError err => {
-            io:println(err.errorMessage);
-            test:assertFail(msg = err.errorMessage);
-        }
-    }
+     Value[] keyValue = check consulClient -> readKey(key);
+     test:assertNotEquals(keyValue, null, msg = "Failed to call readKey()");
 ```
