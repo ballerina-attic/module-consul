@@ -63,7 +63,7 @@ documentation {Consul Client object
     F{{consulConfig}} Consul connector configurations
     F{{consulConnector}} Consul Connector object
 }
-public type ConsulClient object {
+public type Client object {
     public {
         ConsulConfiguration consulConfig = {};
         ConsulConnector consulConnector = new;
@@ -148,6 +148,7 @@ public type Value {
 
 documentation {value:"Struct to define the error."}
 public type ConsulError {
+    string message;
+    error? cause;
     int statusCode;
-    string errorMessage;
 };

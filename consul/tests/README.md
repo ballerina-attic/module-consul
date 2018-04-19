@@ -1,11 +1,11 @@
-# Ballerina Consul Connector Test
+# Ballerina Consul Endpoint Test
 
-The Consul connector allows you to access the Consul REST API through ballerina. The following section provide you the 
-details on how to use Ballerina Consul connector.
+The Consul Endpoint allows you to access the Consul REST API through ballerina. The following section provide you the 
+details on how to use Ballerina Consul Endpoint.
 ## Compatibility
-| Language Version        | Connector Version          | Consul API version  |
+| Language Version        | Endpoint Version          | Consul API version  |
 | ------------- |:-------------:| -----:|
-| ballerina-tools-0.970.0-alpha4 | 0.6 | v1 |
+| 0.970.0-beta1-SNAPSHOT	 | 0.6 | v1 |
 
 
 ###### Running tests
@@ -17,5 +17,11 @@ URI=""
 ACL_TOKEN=""
 ```
 
-2. Run tests :
-```ballerina test consul``` from your connector directory.
+2. Navigate to the folder package-consul
+
+3. Run tests :
+
+    ```
+    ballerina init
+    ballerina test consul
+   ```

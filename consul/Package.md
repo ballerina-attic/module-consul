@@ -1,14 +1,16 @@
-# Ballerina Consul Connector
+# Ballerina Consul Endpoint
 
-The Consul connector allows you to access the Consul REST API through ballerina. 
-The following section provide you the details on how to use Ballerina Consul connector.
+The Consul Endpoint allows you to access the Consul REST API through ballerina. 
+The following section provide you the details on how to use Ballerina Consul Endpoint.
 
 ## Compatibility
-| Language Version                  | Connector Version   | Consul API Version|
+| Language Version                  | Endpoint Version   | Consul API Version|
 | :-------------------------------- |:--------------------|:-----------------|
-| ballerina-tools-0.970.0-alpha4    | 0.6                 | v1               |
+| 0.970.0-beta1-SNAPSHOT	   | 0.6                 | v1               |
 
-The following sections provide you with information on how to use the Ballerina Consul connector.
+>> **Note :** The source code of the Consul endpoint can be found at [package-consul](https://github.com/wso2-ballerina/package-consul)
+
+The following sections provide you with information on how to use the Ballerina Consul Endpoint.
 
 - [Getting started](#getting-started)
 - [Quick Testing](#quick-testing)
@@ -17,9 +19,12 @@ The following sections provide you with information on how to use the Ballerina 
 1. Install Consul by visiting [https://www.consul.io/intro/getting-started/install.html](https://www.consul
    .io/intro/getting-started/install.html)
 2. Obtain the ACL token (Required when the ACL bootstrap is enabled in Consul agent)
-3. Clone the repository by running the following command
-    `git clone https://github.com/wso2-ballerina/package-consul`
-4. Import the package to your ballerina project.
+3. Import the package to your ballerina project.
+    ```ballerina
+       import wso2/consul;
+    ```
+    This will download the consul artifacts from Ballerina central repository to your local repository.
+
 
 ### Quick Testing
 1. Create a Consul endpoint.
@@ -41,8 +46,8 @@ The following sections provide you with information on how to use the Ballerina 
              test:assertEquals(response, true, msg = "Failed to call registerService()");
          }
          ConsulError err => {
-             io:println(err.errorMessage);
-             test:assertFail(msg = err.errorMessage);
+             io:println(err.message);
+             test:assertFail(msg = err.message);
          }
     }
 ```
@@ -56,8 +61,8 @@ The following sections provide you with information on how to use the Ballerina 
         test:assertNotEquals(response, null, msg = "Failed to call getService()");
         }
     ConsulError err => {
-        io:println(err.errorMessage);
-        test:assertFail(msg = err.errorMessage);
+        io:println(err.message);
+        test:assertFail(msg = err.message);
         }
     }
 ```
@@ -71,8 +76,8 @@ The following sections provide you with information on how to use the Ballerina 
             test:assertEquals(response, true, msg = "Failed to call registerCheck()");
         }
         ConsulError err => {
-            io:println(err.errorMessage);
-            test:assertFail(msg = err.errorMessage);
+            io:println(err.message);
+            test:assertFail(msg = err.message);
         }
     }
 ```
@@ -86,8 +91,8 @@ The following sections provide you with information on how to use the Ballerina 
             test:assertNotEquals(response, null, msg = "Failed to call getCheckByState()");
         }
         ConsulError err => {
-            io:println(err.errorMessage);
-            test:assertFail(msg = err.errorMessage);
+            io:println(err.message);
+            test:assertFail(msg = err.message);
         }
     }
 ```
@@ -101,8 +106,8 @@ The following sections provide you with information on how to use the Ballerina 
             test:assertEquals(response, true, msg = "Failed to call createKey()");
          }
          ConsulError err => {
-            io:println(err.errorMessage);
-            test:assertFail(msg = err.errorMessage);
+            io:println(err.message);
+            test:assertFail(msg = err.message);
          }
      }
 ``` 
@@ -116,8 +121,34 @@ The following sections provide you with information on how to use the Ballerina 
             test:assertNotEquals(response, null, msg = "Failed to call readKey()");
         }
         ConsulError err => {
-            io:println(err.errorMessage);
-            test:assertFail(msg = err.errorMessage);
+            io:println(err.message);
+            test:assertFail(msg = err.message);
         }
     }
+```
+
+##### Example
+
+```ballerina
+import ballerina/io;
+import wso2/consul;
+
+public function main(string[] args) {
+    endpoint Client consulClient {
+        uri:"http://localhost:8500",
+        aclToken:""
+    };
+    
+    json jsonPayload = {"ID":"redis", "Name":"redis1", "Address":"localhost", "port":8000, "EnableTagOverride":false};
+    var serviceRegister = consulClient -> registerService(jsonPayload);
+        match serviceRegister {
+             boolean response => {
+                 test:assertEquals(response, true, msg = "Failed to call registerService()");
+             }
+             ConsulError err => {
+                 io:println(err.message);
+                 test:assertFail(msg = err.message);
+             }
+        }
+}
 ```

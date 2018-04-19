@@ -20,10 +20,10 @@ import ballerina/test;
 import ballerina/config;
 import ballerina/io;
 
-string uri = config:getAsString("URI") but { () => "" };
-string aclToken = config:getAsString("ACL_TOKEN") but { () => "" };
+string uri = config:getAsString("URI");
+string aclToken = config:getAsString("ACL_TOKEN");
 
-endpoint ConsulClient consulClient {
+endpoint Client consulClient {
     uri:uri,
     aclToken:aclToken,
     clientConfig:{}
@@ -40,8 +40,8 @@ function testRegisterService () {
             test:assertEquals(response, true, msg = "Failed to call registerService()");
         }
         ConsulError err => {
-            io:println(err.errorMessage);
-            test:assertFail(msg = err.errorMessage);
+            io:println(err.message);
+            test:assertFail(msg = err.message);
         }
     }
 }
@@ -59,8 +59,8 @@ function testGetService () {
             test:assertNotEquals(response, null, msg = "Failed to call getService()");
         }
         ConsulError err => {
-            io:println(err.errorMessage);
-            test:assertFail(msg = err.errorMessage);
+            io:println(err.message);
+            test:assertFail(msg = err.message);
         }
     }
 }
@@ -69,13 +69,13 @@ function testGetService () {
 function testRegisterCheck () {
     io:println("--------------Calling registerCheck----------------");
     json jsonCheck = {"ID":"mem", "Name":"Memory utilization", "Notes":"Ensure we don't oversubscribe memory",
-                         "DeregisterCriticalServiceAfter":"90m",
-                         "Args":["/usr/local/bin/check_mem.py"],
-                         "HTTP":"https://example.com",
-                         "Method":"POST",
-                         "Header":{"x-foo":["bar", "baz"]},
-                         "Interval":"10s",
-                         "TLSSkipVerify":true};
+        "DeregisterCriticalServiceAfter":"90m",
+        "Args":["/usr/local/bin/check_mem.py"],
+        "HTTP":"https://example.com",
+        "Method":"POST",
+        "Header":{"x-foo":["bar", "baz"]},
+        "Interval":"10s",
+        "TLSSkipVerify":true};
     var checkRegister = consulClient -> registerCheck(jsonCheck);
 
     match checkRegister {
@@ -83,8 +83,8 @@ function testRegisterCheck () {
             test:assertEquals(response, true, msg = "Failed to call registerCheck()");
         }
         ConsulError err => {
-            io:println(err.errorMessage);
-            test:assertFail(msg = err.errorMessage);
+            io:println(err.message);
+            test:assertFail(msg = err.message);
         }
     }
 }
@@ -103,7 +103,7 @@ function testGetCheckByState () {
             test:assertNotEquals(response, null, msg = "Failed to call getCheckByState()");
         }
         ConsulError err => {
-            test:assertFail(msg = err.errorMessage);
+            test:assertFail(msg = err.message);
         }
     }
 }
@@ -120,8 +120,8 @@ function testCreateKey () {
             test:assertEquals(response, true, msg = "Failed to call createKey()");
         }
         ConsulError err => {
-            io:println(err.errorMessage);
-            test:assertFail(msg = err.errorMessage);
+            io:println(err.message);
+            test:assertFail(msg = err.message);
         }
     }
 }
@@ -139,7 +139,7 @@ function testReadKey () {
             test:assertNotEquals(response, null, msg = "Failed to call readKey()");
         }
         ConsulError err => {
-            test:assertFail(msg = err.errorMessage);
+            test:assertFail(msg = err.message);
         }
     }
 }
