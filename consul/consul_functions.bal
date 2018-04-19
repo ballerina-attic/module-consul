@@ -18,21 +18,21 @@ package consul;
 
 function convertToCatalogService (json jsonStatus) returns (CatalogService) {
     CatalogService catalogService = {};
-    string[] serviceTag = [];
-    catalogService.id = jsonStatus.ID.toString() but { () => "" };
-    catalogService.node = jsonStatus.Node.toString() but { () => "" };
-    catalogService.address = jsonStatus.Address.toString() but { () => "" };
-    catalogService.datacenter = jsonStatus.Datacenter.toString() but { () => "" };
-    catalogService.taggedAddresses = jsonStatus.TaggedAddresses.toString() but { () => "" };
-    catalogService.nodeMeta = jsonStatus.NodeMeta.toString() but { () => "" };
-    catalogService.serviceId = jsonStatus.ServiceID.toString() but { () => "" };
-    catalogService.serviceName = jsonStatus.ServiceName.toString() but { () => "" };
-    catalogService.serviceTags = convertToArray(jsonStatus.ServiceTags) but { () => serviceTag };
-    catalogService.serviceAddress = jsonStatus.ServiceAddress.toString() but { () => "" };
-    catalogService.servicePort = convertToInt(jsonStatus.ServicePort) but { () => 0 };
-    catalogService.serviceEnableTagOverride = convertToBoolean(jsonStatus.ServiceEnableTagOverride) but { () => false };
-    catalogService.createIndex = convertToInt(jsonStatus.CreateIndex ) but { () => 0 };
-    catalogService.modifyIndex = convertToInt(jsonStatus.ModifyIndex) but { () => 0 };
+    catalogService.id = jsonStatus.ID != null ? jsonStatus.ID.toString() : "";
+    catalogService.node = jsonStatus.Node != null ? jsonStatus.Node.toString() : "";
+    catalogService.address = jsonStatus.Address != null ? jsonStatus.Address.toString() : "";
+    catalogService.datacenter = jsonStatus.Datacenter != null ? jsonStatus.Datacenter.toString() : "";
+    catalogService.taggedAddresses = jsonStatus.TaggedAddresses != null ? jsonStatus.TaggedAddresses.toString() : "";
+    catalogService.nodeMeta = jsonStatus.NodeMeta != null ? jsonStatus.NodeMeta.toString() : "";
+    catalogService.serviceId = jsonStatus.ServiceID != null ? jsonStatus.ServiceID.toString() : "";
+    catalogService.serviceName = jsonStatus.ServiceName != null ? jsonStatus.ServiceName.toString() : "";
+    catalogService.serviceTags = jsonStatus.ServiceTags != null ? convertToArray(jsonStatus.ServiceTags) : [];
+    catalogService.serviceAddress = jsonStatus.ServiceAddress != null ? jsonStatus.ServiceAddress.toString() : "";
+    catalogService.servicePort = jsonStatus.ServicePort != null ? convertToInt(jsonStatus.ServicePort) : 0;
+    catalogService.serviceEnableTagOverride = jsonStatus.ServiceEnableTagOverride != null ? convertToBoolean
+                                                (jsonStatus.ServiceEnableTagOverride) : false;
+    catalogService.createIndex = jsonStatus.CreateIndex != null ? convertToInt(jsonStatus.CreateIndex ) : 0;
+    catalogService.modifyIndex = jsonStatus.ModifyIndex != null ? convertToInt(jsonStatus.ModifyIndex) : 0;
     return catalogService;
 }
 
@@ -58,19 +58,18 @@ function convertToCatalogServices (json jsonStatuses) returns CatalogService[] {
 
 function convertHealthClient (json jsonStatus) returns  HealthCheck{
     HealthCheck healthCheck = {};
-    string[] serviceTag = [];
-    healthCheck.node = jsonStatus.Node.toString() but { () => "" };
-    healthCheck.checkId = jsonStatus.CheckID.toString() but { () => "" };
-    healthCheck.name = jsonStatus.Name.toString() but { () => "" };
-    healthCheck.status = jsonStatus.Status.toString() but { () => "" };
-    healthCheck.notes = jsonStatus.Notes.toString() but { () => "" };
-    healthCheck.output = jsonStatus.Output.toString() but { () => "" };
-    healthCheck.serviceId = jsonStatus.ServiceID.toString() but { () => "" };
-    healthCheck.serviceName = jsonStatus.ServiceName.toString() but { () => "" };
-    healthCheck.serviceTags = convertToArray(jsonStatus.ServiceTags) but { () => serviceTag };
-    healthCheck.definition = jsonStatus.Definition.toString() but { () => "" };
-    healthCheck.createIndex = convertToInt(jsonStatus.CreateIndex) but { () => 0 };
-    healthCheck.modifyIndex = convertToInt(jsonStatus.ModifyIndex)  but { () => 0 };
+    healthCheck.node = jsonStatus.Node != null ? jsonStatus.Node.toString() : "";
+    healthCheck.checkId = jsonStatus.CheckID != null ? jsonStatus.CheckID.toString() : "";
+    healthCheck.name = jsonStatus.Name != null ? jsonStatus.Name.toString() : "";
+    healthCheck.status = jsonStatus.Status != null ? jsonStatus.Status.toString() : "";
+    healthCheck.notes = jsonStatus.Notes != null ? jsonStatus.Notes.toString() : "";
+    healthCheck.output = jsonStatus.Output != null ? jsonStatus.Output.toString() : "";
+    healthCheck.serviceId = jsonStatus.ServiceID != null ? jsonStatus.ServiceID.toString() : "";
+    healthCheck.serviceName = jsonStatus.ServiceName != null ? jsonStatus.ServiceName.toString() : "";
+    healthCheck.serviceTags = jsonStatus.ServiceTags != null ? convertToArray(jsonStatus.ServiceTags) : [];
+    healthCheck.definition = jsonStatus.Definition != null ? jsonStatus.Definition.toString() : "";
+    healthCheck.createIndex = jsonStatus.CreateIndex != null ? convertToInt(jsonStatus.CreateIndex) : 0;
+    healthCheck.modifyIndex = jsonStatus.ModifyIndex != null ? convertToInt(jsonStatus.ModifyIndex)  : 0;
     return healthCheck;
 }
 
@@ -86,17 +85,17 @@ function convertToValues (json jsonStatuses) returns Value[] {
 
 function convertValues(json jsonStatus) returns Value{
     Value value = {};
-    value.lockIndex = convertToInt(jsonStatus.LockIndex) but { () => 0 };
-    value.key = jsonStatus.Key.toString() but { () => "" };
-    value.flags = convertToInt(jsonStatus.Flags) but { () => 0 };
-    value.value = jsonStatus.Value.toString() but { () => "" };
-    value.createIndex = convertToInt(jsonStatus.CreateIndex) but { () => 0 };
-    value.modifyIndex = convertToInt(jsonStatus.ModifyIndex) but { () => 0 };
+    value.lockIndex = jsonStatus.LockIndex != null ? convertToInt(jsonStatus.LockIndex) : 0;
+    value.key = jsonStatus.Key != null ? jsonStatus.Key.toString() : "";
+    value.flags = jsonStatus.Flags != null ? convertToInt(jsonStatus.Flags) : 0;
+    value.value = jsonStatus.Value != null ? jsonStatus.Value.toString() : "";
+    value.createIndex = jsonStatus.CreateIndex != null ? convertToInt(jsonStatus.CreateIndex) : 0;
+    value.modifyIndex = jsonStatus.ModifyIndex != null ? convertToInt(jsonStatus.ModifyIndex) : 0;
     return value;
 }
 
 function convertToInt(json jsonVal) returns int{
-    string stringVal = jsonVal.toString() ?: "";
+    string stringVal = jsonVal.toString();
     if(stringVal != "") {
         return check <int> stringVal;
     } else {
@@ -105,7 +104,7 @@ function convertToInt(json jsonVal) returns int{
 }
 
 function convertToBoolean(json jsonVal) returns (boolean) {
-    string stringVal = jsonVal.toString() ?: "";
+    string stringVal = jsonVal.toString();
     return <boolean> stringVal;
 }
 
@@ -113,7 +112,7 @@ function convertToArray (json jsonValues) returns string[] {
     string[] serviceTags = [];
     int i = 0;
     foreach jsonVal in jsonValues {
-        serviceTags[i] = jsonVal.toString()?: "";
+        serviceTags[i] = jsonVal.toString();
         i = i + 1;
     }
     return serviceTags;

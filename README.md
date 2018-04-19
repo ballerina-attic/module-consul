@@ -33,7 +33,15 @@ public function main(string[] args) {
     };
     
     json jsonPayload = {"ID":"redis", "Name":"redis1", "Address":"localhost", "port":8000, "EnableTagOverride":false};
-    boolean serviceRegister = check consulClient -> registerService (jsonPayload);
-    test:assertEquals(serviceRegister, true, msg = "Failed to call registerService()");
+    var serviceRegister = consulClient -> registerService(jsonPayload);
+        match serviceRegister {
+             boolean response => {
+                 test:assertEquals(response, true, msg = "Failed to call registerService()");
+             }
+             ConsulError err => {
+                 io:println(err.message);
+                 test:assertFail(msg = err.message);
+             }
+        }
 }
 ```

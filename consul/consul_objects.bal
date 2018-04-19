@@ -30,33 +30,33 @@ public type ConsulConnector object {
     documentation {Get the details of a particular service
         P{{serviceName}} The name of the service
         returns CatalogService Object or Error occured during HTTP client invocation.}
-    public function getService(string serviceName) returns (CatalogService[]|error);
+    public function getService(string serviceName) returns (CatalogService[]|ConsulError);
 
     documentation {Get the details of the  passing/critical state checks
         P{{state}} The state of the checks
         returns HealthCheck Object or Error occured during HTTP client invocation.}
-    public function getCheckByState(string state) returns (HealthCheck[]|error);
+    public function getCheckByState(string state) returns (HealthCheck[]|ConsulError);
 
     documentation {Get the details of a particular key
         P{{key}} The path of the key to read
         returns Value Object or Error occured during HTTP client invocation.}
-    public function readKey(string key) returns (Value[]|error);
+    public function readKey(string key) returns (Value[]|ConsulError);
 
     documentation {Register the service
         P{{jsonPayload}} The details of the service
         returns boolean or Error occured during HTTP client invocation.}
-    public function registerService (json jsonPayload) returns (boolean|error);
+    public function registerService (json jsonPayload) returns (boolean|ConsulError);
 
     documentation {Register the check
         P{{jsonPayload}} The details of the check
         returns boolean or Error occured during HTTP client invocation.}
-    public function registerCheck (json jsonPayload) returns (boolean|error);
+    public function registerCheck (json jsonPayload) returns (boolean|ConsulError);
 
     documentation {Create the key
         P{{keyName}} name of the key
         P{{value}} value of the key
         returns boolean or Error occured during HTTP client invocation.}
-    public function createKey (string keyName, string value) returns (boolean|error);
+    public function createKey (string keyName, string value) returns (boolean|ConsulError);
 };
 
 documentation {Consul Client object
