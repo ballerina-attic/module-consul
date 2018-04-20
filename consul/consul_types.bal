@@ -74,21 +74,10 @@ public type Client object {
     }
     public function init (ConsulConfiguration consulConfig);
 
-    documentation {Register Consul connector endpoint
-        P{{serviceType}} Accepts types of data (int, float, string, boolean, etc)
-    }
-    public function register (typedesc serviceType);
-
-    documentation {Start Consul connector endpoint}
-    public function start ();
-
     documentation {Return the Consul connector client
         returns Consul connector client
     }
-    public function getClient () returns ConsulConnector;
-
-    documentation {Stop Consul connector client}
-    public function stop ();
+    public function getCallerActions () returns ConsulConnector;
 };
 
 documentation {Consul connector configurations can be setup here

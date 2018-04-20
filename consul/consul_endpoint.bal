@@ -25,16 +25,10 @@ public function <ConsulConfiguration consulConfig> ConsulConfiguration () {
 public function Client::init(ConsulConfiguration consulConfig) {
     self.consulConnector.uri = consulConfig.uri;
     self.consulConnector.aclToken = consulConfig.aclToken;
-    consulConfig.clientConfig.targets = [{url:consulConfig.uri}];
+    consulConfig.clientConfig.url = consulConfig.uri;
     self.consulConnector.clientEndpoint.init(consulConfig.clientConfig);
 }
 
-public function Client::getClient() returns ConsulConnector {
+public function Client::getCallerActions() returns ConsulConnector {
     return self.consulConnector;
 }
-
-public function Client::start() {}
-
-public function Client::stop() {}
-
-public function Client::register(typedesc serviceType) {}
