@@ -1,6 +1,6 @@
 # Ballerina Consul Connector
 
-Allows connecting Consul REST API.
+Allows connecting to Consul REST API.
 
 The Consul Connector allows you to access the Consul REST API through ballerina. 
 This connector provides facility to register services, register checks, create keys, read keys, list the details of 
@@ -23,19 +23,19 @@ The following section provide you the details on how to use Ballerina Consul Con
     ```
 5. Import the consul package to your Ballerina program as follows.
 
-```ballerina
-import ballerina/io;
-import wso2/consul;
+    ```ballerina
+       import ballerina/io;
+       import wso2/consul;
 
-public function main(string[] args) {
-    endpoint Client consulClient {
-        uri:"<your_uri>",
-        aclToken:"<your_aclToken>"
-    };
+       public function main(string[] args) {
+           endpoint Client consulClient {
+               uri:"<your_uri>",
+               aclToken:"<your_aclToken>"
+           };
     
-    json jsonPayload = {"ID":"redis", "Name":"redis1", "Address":"localhost", "port":8000, "EnableTagOverride":false};
-    var serviceRegister = consulClient -> registerService(jsonPayload);
-        match serviceRegister {
+           json jsonPayload = {"ID":"redis", "Name":"redis1", "Address":"localhost", "port":8000, "EnableTagOverride":false};
+           var serviceRegister = consulClient -> registerService(jsonPayload);
+           match serviceRegister {
              boolean response => {
                  test:assertEquals(response, true, msg = "Failed to call registerService()");
              }
@@ -44,5 +44,5 @@ public function main(string[] args) {
                  test:assertFail(msg = err.message);
              }
         }
-}
-```
+    }
+    ```
