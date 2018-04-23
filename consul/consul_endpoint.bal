@@ -14,8 +14,6 @@
 // specific language governing permissions and limitations
 // under the License.
 
-package consul;
-
 import ballerina/http;
 
 public function <ConsulConfiguration consulConfig> ConsulConfiguration () {

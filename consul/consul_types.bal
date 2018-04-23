@@ -14,12 +14,6 @@
 // specific language governing permissions and limitations
 // under the License.
 
-package consul;
-
-import ballerina/http;
-import ballerina/util;
-import ballerina/io;
-
 public type ConsulConnector object {
     public {
        string uri;
@@ -29,33 +23,33 @@ public type ConsulConnector object {
 
     documentation {Get the details of a particular service
         P{{serviceName}} The name of the service
-        returns CatalogService Object or Error occured during HTTP client invocation.}
+        R{{}} CatalogService Object or Error occured during HTTP client invocation.}
     public function getService(string serviceName) returns (CatalogService[]|ConsulError);
 
     documentation {Get the details of the  passing/critical state checks
         P{{state}} The state of the checks
-        returns HealthCheck Object or Error occured during HTTP client invocation.}
+        R{{}} HealthCheck Object or Error occured during HTTP client invocation.}
     public function getCheckByState(string state) returns (HealthCheck[]|ConsulError);
 
     documentation {Get the details of a particular key
         P{{key}} The path of the key to read
-        returns Value Object or Error occured during HTTP client invocation.}
+        R{{}} Value Object or Error occured during HTTP client invocation.}
     public function readKey(string key) returns (Value[]|ConsulError);
 
     documentation {Register the service
         P{{jsonPayload}} The details of the service
-        returns boolean or Error occured during HTTP client invocation.}
+        R{{}} Boolean or Error occured during HTTP client invocation.}
     public function registerService (json jsonPayload) returns (boolean|ConsulError);
 
     documentation {Register the check
         P{{jsonPayload}} The details of the check
-        returns boolean or Error occured during HTTP client invocation.}
+        R{{}} Boolean or Error occured during HTTP client invocation.}
     public function registerCheck (json jsonPayload) returns (boolean|ConsulError);
 
     documentation {Create the key
-        P{{keyName}} name of the key
-        P{{value}} value of the key
-        returns boolean or Error occured during HTTP client invocation.}
+        P{{keyName}} Name of the key
+        P{{value}} Value of the key
+        R{{}} Boolean or Error occured during HTTP client invocation.}
     public function createKey (string keyName, string value) returns (boolean|ConsulError);
 };
 
@@ -75,7 +69,7 @@ public type Client object {
     public function init (ConsulConfiguration consulConfig);
 
     documentation {Return the Consul connector client
-        returns Consul connector client
+        R{{}} Consul connector client
     }
     public function getCallerActions () returns ConsulConnector;
 };
@@ -91,7 +85,7 @@ public type ConsulConfiguration {
     http:ClientEndpointConfig clientConfig;
 };
 
-documentation {value:"Struct to define the CatalogService."}
+documentation {Struct to define the CatalogService.}
 public type CatalogService {
     string id;
     string node;
@@ -109,7 +103,7 @@ public type CatalogService {
     int modifyIndex;
 };
 
-documentation {value:"Struct to define the HealthCheck."}
+documentation {Struct to define the HealthCheck.}
 public type HealthCheck {
     string node;
     string checkId;
@@ -125,7 +119,7 @@ public type HealthCheck {
     int modifyIndex;
 };
 
-documentation {value:"Struct to define the Value."}
+documentation {Struct to define the Value.}
 public type Value {
     int lockIndex;
     string key;
@@ -135,7 +129,7 @@ public type Value {
     int modifyIndex;
 };
 
-documentation {value:"Struct to define the error."}
+documentation {Struct to define the error.}
 public type ConsulError {
     string message;
     error? cause;

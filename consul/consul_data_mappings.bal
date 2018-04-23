@@ -14,8 +14,6 @@
 // specific language governing permissions and limitations
 // under the License.
 
-package consul;
-
 function convertToCatalogService (json jsonStatus) returns (CatalogService) {
     CatalogService catalogService = {};
     catalogService.id = jsonStatus.ID != null ? jsonStatus.ID.toString() : "";
