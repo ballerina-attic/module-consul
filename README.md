@@ -1,12 +1,14 @@
 # Ballerina Consul Connector
 
 The Consul Connector allows you to access the Consul REST API through ballerina. 
+This connector provides facility to register services, register checks, create keys, read keys, list the details of 
+the services, list the details of the check by state etc.
 The following section provide you the details on how to use Ballerina Consul Connector.
 
 ## Compatibility
 | Ballerina Language Version | Consul API version  |
 | ------------- | ----- |
-| 0.970.0-beta11 | v1 |
+| 0.970.0-beta12 | v1 |
 
 
 The following sections provide you with information on how to use the Ballerina Consul Connector.
