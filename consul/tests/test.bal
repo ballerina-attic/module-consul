@@ -28,10 +28,10 @@ endpoint Client consulClient {
 };
 
 @test:Config
-function testRegisterService () {
+function testRegisterService() {
     io:println("--------------Calling registerService----------------");
     json jsonPayload = {"ID":"redis", "Name":"redis1", "Address":"localhost", "port":8000, "EnableTagOverride":false};
-    var serviceRegister = consulClient -> registerService(jsonPayload);
+    var serviceRegister = consulClient->registerService(jsonPayload);
 
     match serviceRegister {
         boolean response => {
@@ -47,10 +47,10 @@ function testRegisterService () {
 @test:Config {
     dependsOn:["testRegisterService"]
 }
-function testGetService () {
+function testGetService() {
     io:println("--------------Calling getService----------------");
     string serviceName = "redis1";
-    var serviceDetails = consulClient -> getService(serviceName);
+    var serviceDetails = consulClient->getService(serviceName);
 
     match serviceDetails {
         CatalogService[] response => {
@@ -64,7 +64,7 @@ function testGetService () {
 }
 
 @test:Config
-function testRegisterCheck () {
+function testRegisterCheck() {
     io:println("--------------Calling registerCheck----------------");
     json jsonCheck = {"ID":"mem", "Name":"Memory utilization", "Notes":"Ensure we don't oversubscribe memory",
         "DeregisterCriticalServiceAfter":"90m",
@@ -74,7 +74,7 @@ function testRegisterCheck () {
         "Header":{"x-foo":["bar", "baz"]},
         "Interval":"10s",
         "TLSSkipVerify":true};
-    var checkRegister = consulClient -> registerCheck(jsonCheck);
+    var checkRegister = consulClient->registerCheck(jsonCheck);
 
     match checkRegister {
         boolean response => {
@@ -91,10 +91,10 @@ function testRegisterCheck () {
 @test:Config {
     dependsOn:["testRegisterCheck"]
 }
-function testGetCheckByState () {
+function testGetCheckByState() {
     io:println("--------------Calling getCheckByState----------------");
     string state = "passing";
-    var checkDetails = consulClient -> getCheckByState(state);
+    var checkDetails = consulClient->getCheckByState(state);
 
     match checkDetails {
         HealthCheck[] response => {
@@ -107,11 +107,11 @@ function testGetCheckByState () {
 }
 
 @test:Config
-function testCreateKey () {
+function testCreateKey() {
     io:println("--------------Calling createKey----------------");
     string keyName = "foo";
     string value = "bar";
-    var keyRegister = consulClient -> createKey(keyName, value);
+    var keyRegister = consulClient->createKey(keyName, value);
 
     match keyRegister {
         boolean response => {
@@ -127,10 +127,10 @@ function testCreateKey () {
 @test:Config {
     dependsOn:["testCreateKey"]
 }
-function testReadKey () {
+function testReadKey() {
     io:println("--------------Calling readKey----------------");
     string key = "foo";
-    var keyValue = consulClient -> readKey(key);
+    var keyValue = consulClient->readKey(key);
 
     match keyValue {
         Value[] response => {
