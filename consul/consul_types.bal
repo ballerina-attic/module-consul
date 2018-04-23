@@ -14,6 +14,11 @@
 // specific language governing permissions and limitations
 // under the License.
 
+documentation {Struct to define the Consul connector
+     F{{uri}} - The Consul API URL
+     F{{aclToken}} - The acl token of the consul agent
+     F{{clientEndpoint}} - HTTP client endpoint
+}
 public type ConsulConnector object {
     public {
        string uri;
@@ -23,33 +28,33 @@ public type ConsulConnector object {
 
     documentation {Get the details of a particular service
         P{{serviceName}} The name of the service
-        R{{}} CatalogService Object or Error occured during HTTP client invocation.}
+        R{{}} If success, returns CatalogService object with basic details, else returns ConsulError object.}
     public function getService(string serviceName) returns (CatalogService[]|ConsulError);
 
     documentation {Get the details of the  passing/critical state checks
         P{{state}} The state of the checks
-        R{{}} HealthCheck Object or Error occured during HTTP client invocation.}
+        R{{}} If success, returns HealthCheck Object with basic details, else returns ConsulError object.}
     public function getCheckByState(string state) returns (HealthCheck[]|ConsulError);
 
     documentation {Get the details of a particular key
         P{{key}} The path of the key to read
-        R{{}} Value Object or Error occured during HTTP client invocation.}
+        R{{}} If success, returns Value Object with basic details, else returns ConsulError object.}
     public function readKey(string key) returns (Value[]|ConsulError);
 
     documentation {Register the service
         P{{jsonPayload}} The details of the service
-        R{{}} Boolean or Error occured during HTTP client invocation.}
+        R{{}} If success, returns boolean else returns ConsulError object.}
     public function registerService (json jsonPayload) returns (boolean|ConsulError);
 
     documentation {Register the check
         P{{jsonPayload}} The details of the check
-        R{{}} Boolean or Error occured during HTTP client invocation.}
+        R{{}} If success, returns boolean else returns ConsulError object.}
     public function registerCheck (json jsonPayload) returns (boolean|ConsulError);
 
     documentation {Create the key
         P{{keyName}} Name of the key
         P{{value}} Value of the key
-        R{{}} Boolean or Error occured during HTTP client invocation.}
+        R{{}} If success, returns boolean else returns ConsulError object.}
     public function createKey (string keyName, string value) returns (boolean|ConsulError);
 };
 
@@ -85,7 +90,22 @@ public type ConsulConfiguration {
     http:ClientEndpointConfig clientConfig;
 };
 
-documentation {Struct to define the CatalogService.}
+documentation {Struct to define the CatalogService
+    F{{id}} UUID assigned to the service
+    F{{node}} Name of the Consul node on which the service is registered
+    F{{address}} IP address of the Consul node on which the service is registered
+    F{{datacenter}} Data center of the Consul node on which the service is registered.
+    F{{taggedAddresses}} List of explicit LAN and WAN IP addresses for the agent
+    F{{nodeMeta}} List of user-defined metadata key/value pairs for the node
+    F{{serviceId}}  A unique service instance identifier
+    F{{serviceName}} Name of the service
+    F{{serviceTags}}  List of tags for the service
+    F{{serviceAddress}} The IP address of the service host
+    F{{servicePort}} Port number of the service
+    F{{serviceEnableTagOverride}} Indicates whether service tags can be overridden on this service
+    F{{createIndex}} An internal index value representing when the service was created
+    F{{modifyIndex}} Last index that modified the service
+}
 public type CatalogService {
     string id;
     string node;
@@ -103,7 +123,20 @@ public type CatalogService {
     int modifyIndex;
 };
 
-documentation {Struct to define the HealthCheck.}
+documentation {Struct to define the HealthCheck
+    F{{node}} Name or ID of the node
+    F{{checkId}} Id of the check
+    F{{name}} Name of the check
+    F{{status}} Status of the check
+    F{{notes}} Arbitrary information for humans
+    F{{output}} A human-readable message
+    F{{serviceId}} Id of the service
+    F{{serviceName}} Name of the service
+    F{{serviceTags}} List of tags for the service
+    F{{definition}} Definition of the check
+    F{{createIndex}} An internal index value representing when the check was created
+    F{{modifyIndex}} Last index that modified the check
+}
 public type HealthCheck {
     string node;
     string checkId;
@@ -119,7 +152,14 @@ public type HealthCheck {
     int modifyIndex;
 };
 
-documentation {Struct to define the Value.}
+documentation {Struct to define the Value
+    F{{lockIndex}} The number of times this key has successfully been acquired in a lock.
+    F{{key}} Full path of the entry.
+    F{{flags}} An opaque unsigned integer that can be attached to each entry
+    F{{value}} A base64-encoded blob of data.
+    F{{createIndex}} An internal index value representing when the entry was created
+    F{{modifyIndex}} Last index that modified the key
+}
 public type Value {
     int lockIndex;
     string key;
@@ -129,7 +169,10 @@ public type Value {
     int modifyIndex;
 };
 
-documentation {Struct to define the error.}
+documentation {Struct to define the error
+    F{{message}} - Error message of the response
+    F{{cause}} - The error which caused the Consul error
+    F{{statusCode}} - Status code of the response}
 public type ConsulError {
     string message;
     error? cause;
