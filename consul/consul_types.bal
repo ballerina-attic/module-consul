@@ -21,9 +21,9 @@ documentation {Struct to define the Consul connector
 }
 public type ConsulConnector object {
     public {
-       string uri;
-       string aclToken;
-       http:Client clientEndpoint = new;
+        string uri;
+        string aclToken;
+        http:Client clientEndpoint = new;
     }
 
     documentation {Get the details of a particular service
@@ -44,18 +44,18 @@ public type ConsulConnector object {
     documentation {Register the service
         P{{jsonPayload}} The details of the service
         R{{}} If success, returns boolean else returns ConsulError object.}
-    public function registerService (json jsonPayload) returns (boolean|ConsulError);
+    public function registerService(json jsonPayload) returns (boolean|ConsulError);
 
     documentation {Register the check
         P{{jsonPayload}} The details of the check
         R{{}} If success, returns boolean else returns ConsulError object.}
-    public function registerCheck (json jsonPayload) returns (boolean|ConsulError);
+    public function registerCheck(json jsonPayload) returns (boolean|ConsulError);
 
     documentation {Create the key
         P{{keyName}} Name of the key
         P{{value}} Value of the key
         R{{}} If success, returns boolean else returns ConsulError object.}
-    public function createKey (string keyName, string value) returns (boolean|ConsulError);
+    public function createKey(string keyName, string value) returns (boolean|ConsulError);
 };
 
 documentation {Consul Client object
@@ -71,12 +71,12 @@ public type Client object {
     documentation {Consul connector endpoint initialization function
         P{{consulConfig}} Consul connector configuration
     }
-    public function init (ConsulConfiguration consulConfig);
+    public function init(ConsulConfiguration consulConfig);
 
     documentation {Return the Consul connector client
         R{{}} Consul connector client
     }
-    public function getCallerActions () returns ConsulConnector;
+    public function getCallerActions() returns ConsulConnector;
 };
 
 documentation {Consul connector configurations can be setup here

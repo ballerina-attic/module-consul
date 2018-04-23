@@ -14,7 +14,7 @@
 // specific language governing permissions and limitations
 // under the License.
 
-function convertToCatalogService (json jsonStatus) returns (CatalogService) {
+function convertToCatalogService(json jsonStatus) returns (CatalogService) {
     CatalogService catalogService = {};
     catalogService.id = jsonStatus.ID != null ? jsonStatus.ID.toString() : "";
     catalogService.node = jsonStatus.Node != null ? jsonStatus.Node.toString() : "";
@@ -34,7 +34,7 @@ function convertToCatalogService (json jsonStatus) returns (CatalogService) {
     return catalogService;
 }
 
-function convertToHealthClients (json jsonStatuses) returns HealthCheck[] {
+function convertToHealthClients(json jsonStatuses) returns HealthCheck[] {
     HealthCheck[] healthCheck = [];
     int i = 0;
     foreach jsonStatus in jsonStatuses {
@@ -44,7 +44,7 @@ function convertToHealthClients (json jsonStatuses) returns HealthCheck[] {
     return healthCheck;
 }
 
-function convertToCatalogServices (json jsonStatuses) returns CatalogService[] {
+function convertToCatalogServices(json jsonStatuses) returns CatalogService[] {
     CatalogService[] catalogService = [];
     int i = 0;
     foreach jsonStatus in jsonStatuses {
@@ -54,7 +54,7 @@ function convertToCatalogServices (json jsonStatuses) returns CatalogService[] {
     return catalogService;
 }
 
-function convertHealthClient (json jsonStatus) returns  HealthCheck{
+function convertHealthClient(json jsonStatus) returns HealthCheck {
     HealthCheck healthCheck = {};
     healthCheck.node = jsonStatus.Node != null ? jsonStatus.Node.toString() : "";
     healthCheck.checkId = jsonStatus.CheckID != null ? jsonStatus.CheckID.toString() : "";
@@ -71,7 +71,7 @@ function convertHealthClient (json jsonStatus) returns  HealthCheck{
     return healthCheck;
 }
 
-function convertToValues (json jsonStatuses) returns Value[] {
+function convertToValues(json jsonStatuses) returns Value[] {
     Value[] values = [];
     int i = 0;
     foreach jsonStatus in jsonStatuses {
@@ -81,7 +81,7 @@ function convertToValues (json jsonStatuses) returns Value[] {
     return values;
 }
 
-function convertValues(json jsonStatus) returns Value{
+function convertValues(json jsonStatus) returns Value {
     Value value = {};
     value.lockIndex = jsonStatus.LockIndex != null ? convertToInt(jsonStatus.LockIndex) : 0;
     value.key = jsonStatus.Key != null ? jsonStatus.Key.toString() : "";
@@ -92,10 +92,10 @@ function convertValues(json jsonStatus) returns Value{
     return value;
 }
 
-function convertToInt(json jsonVal) returns int{
+function convertToInt(json jsonVal) returns int {
     string stringVal = jsonVal.toString();
-    if(stringVal != "") {
-        return check <int> stringVal;
+    if (stringVal != "") {
+        return check <int>stringVal;
     } else {
         return 0;
     }
@@ -103,10 +103,10 @@ function convertToInt(json jsonVal) returns int{
 
 function convertToBoolean(json jsonVal) returns (boolean) {
     string stringVal = jsonVal.toString();
-    return <boolean> stringVal;
+    return <boolean>stringVal;
 }
 
-function convertToArray (json jsonValues) returns string[] {
+function convertToArray(json jsonValues) returns string[] {
     string[] serviceTags = [];
     int i = 0;
     foreach jsonVal in jsonValues {

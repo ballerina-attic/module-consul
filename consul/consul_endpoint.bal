@@ -16,7 +16,7 @@
 
 import ballerina/http;
 
-public function <ConsulConfiguration consulConfig> ConsulConfiguration () {
+public function<ConsulConfiguration consulConfig> ConsulConfiguration() {
     consulConfig.clientConfig = {};
 }
 
