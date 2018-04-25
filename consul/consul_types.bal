@@ -172,9 +172,8 @@ public type Value {
 documentation {Struct to define the error
     F{{message}} - Error message of the response
     F{{cause}} - The error which caused the Consul error
-    F{{statusCode}} - Status code of the response}
+}
 public type ConsulError {
     string message;
     error? cause;
-    int statusCode;
 };
