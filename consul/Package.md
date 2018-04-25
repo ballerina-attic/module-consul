@@ -1,48 +1,102 @@
-# Ballerina Consul Connector
+Connects to Consul from Ballerina.
 
-Allows connecting to Consul REST API.
+# Package Overview
 
-The Consul Connector allows you to access the Consul REST API through ballerina. 
-This connector provides facility to register services, register checks, create keys, read keys, list the details of 
-the services, list the details of the check by state etc.
-The following section provide you the details on how to use Ballerina Consul Connector.
+This package provides a Ballerina API for the Consul REST API. It contains operations that register services and checks, create and read keys, list the details of the services, list the details of checks in a given state, etc.
+
+**Service Operations**
+
+The `wso2/consul` package contains operations that register services and get the details of a particular service.
+
+**Check Operations**
+
+The `wso2/consul` package contains operations that register and get the details of checks of a given state.
+
+**Key Operations**
+
+The `wso2/consul` package contains operations that create entries and get the details of a particular key.
+
 
 ## Compatibility
-| Ballerina Language Version | Consul API version  |
-| ------------- | -----|
-| 0.970.0-beta12 | v1 |
 
-### Getting started
-1. Refer the [Getting Started guide](https://ballerina.io/learn/getting-started/) to download Ballerina and install tools.
-2. Install Consul by visiting [https://www.consul.io/intro/getting-started/install.html](https://www.consul
-   .io/intro/getting-started/install.html)
-3. Obtain the ACL token (Required when the ACL bootstrap is enabled in Consul agent)
-4. Create a new Ballerina project by executing the following command.
-    ```ballerina
-    <PROJECT_ROOT_DIRECTORY>$ ballerina init
-    ```
-5. Import the consul package to your Ballerina program as follows.
+|                                 |       Version                  |
+|  :---------------------------:  |  :---------------------------: |
+|  Ballerina Language Version     |   0.970.0-beta15               |
+|  Consul API Version             |   V1                           |
 
-    ```ballerina
-       import ballerina/io;
-       import wso2/consul;
+## Sample
 
-       public function main(string[] args) {
-           endpoint Client consulClient {
-               uri:"<your_uri>",
-               aclToken:"<your_aclToken>"
-           };
-    
-           json jsonPayload = {"ID":"redis", "Name":"redis1", "Address":"localhost", "port":8000, "EnableTagOverride":false};
-           var serviceRegister = consulClient -> registerService(jsonPayload);
-           match serviceRegister {
-             boolean response => {
-                 test:assertEquals(response, true, msg = "Failed to call registerService()");
-             }
-             ConsulError err => {
-                 io:println(err.message);
-                 test:assertFail(msg = err.message);
-             }
-        }
-    }
-    ```
+First, import the `wso2/consul` package into the Ballerina project.
+
+```ballerina
+import wso2/consul;
+```
+
+**Obtain the ACL Token to Run the Sample**
+
+Obtain the ACL token (required when the ACL bootstrap is enabled in the Consul agent) using the following curl command:
+```ballerina
+curl -X PUT http://localhost:8500/v1/acl/bootstrap
+```
+
+You can now enter the token in the Consul client config:
+```ballerina
+endpoint Client consulClient {
+    uri:uri,
+    aclToken:aclToken,
+};
+```
+
+Register services in Consul with the given `jsonPayload`.
+```ballerina
+var serviceRegister = consulClient->registerService(jsonPayload);
+match serviceRegister {
+    boolean response => io:println(response);
+    ConsulError err => io:println(err);
+}
+```
+
+Get the details of the service with the given `serviceName`.
+```ballerina
+var serviceDetails = consulClient->getService(serviceName);
+match serviceDetails {
+    CatalogService[] response => io:println(response);
+    ConsulError err => io:println(err);
+}
+```
+
+Register a check in Consul with the given `jsonCheck`.
+```ballerina
+var checkRegister = consulClient->registerCheck(jsonCheck);
+match checkRegister {
+    boolean response => io:println(response);
+    ConsulError err => io:println(err);
+}
+```
+
+Get the details of checks with the given `state`.
+```ballerina
+var checkDetails = consulClient->getCheckByState(state);
+match checkDetails {
+    HealthCheck[] response => io:println(response);
+    ConsulError err => io:println(err);
+}
+```
+
+Create the entry in Consul with the given `keyName` and `value`.
+```ballerina
+var keyRegister = consulClient->createKey(keyName, value);
+match keyRegister {
+    boolean response => io:println(response);
+    ConsulError err => io:println(err);
+}
+```
+
+Read the key in Consul with the given `key`.
+```ballerina
+var keyValue = consulClient->readKey(key);
+match keyValue {
+    Value[] response => io:println(response);
+    ConsulError err => io:println(err);
+}
+```
