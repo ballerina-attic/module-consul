@@ -7,8 +7,8 @@ The following section provide you the details on how to use Ballerina Consul Con
 
 ## Compatibility
 | Ballerina Language Version | Consul API version  |
-| ------------- | ----- |
-| 0.970.0-beta12 | v1 |
+| -------------------------- | ------------------- |
+| 0.970.0-beta15             | v1                  |
 
 
 The following sections provide you with information on how to use the Ballerina Consul Connector.
