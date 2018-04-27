@@ -3,7 +3,7 @@ Connects to Consul from Ballerina.
 # Package Overview
 
 The Consul connector allows you to register services and checks, create and read keys, list the details
- of the services, list the details of checks in a given state, etc.
+ of the services, list the details of checks in a given state such as passing, warning, or critical etc.
 
 **Service Operations**
 
