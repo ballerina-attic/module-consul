@@ -2,7 +2,8 @@ Connects to Consul from Ballerina.
 
 # Package Overview
 
-This package provides a Ballerina API for the Consul REST API. It contains operations that register services and checks, create and read keys, list the details of the services, list the details of checks in a given state, etc.
+The Consul connector allows you to register services and checks, create and read keys, list the details
+ of the services, list the details of checks in a given state, etc.
 
 **Service Operations**
 
@@ -21,8 +22,8 @@ The `wso2/consul` package contains operations that create entries and get the de
 
 |                                 |       Version                  |
 |  :---------------------------:  |  :---------------------------: |
-|  Ballerina Language Version     |   0.970.0-beta15               |
-|  Consul API Version             |   V1                           |
+|  Ballerina Language     |    0.970.0-rc1                |
+|  Consul API             |   V1                           |
 
 ## Sample
 
