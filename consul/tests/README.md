@@ -6,7 +6,7 @@ The Consul connector allows you to register services and checks, create and read
 ## Compatibility
 | Ballerina Language Version | Consul API version  |
 | -------------------------- | ------------------- |
-|  0.970.0-rc1              | v1                  |
+|  0.970.0                   | v1                  |
 
 
 ###### Running tests

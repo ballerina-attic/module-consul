@@ -2,8 +2,7 @@ Connects to Consul from Ballerina.
 
 # Package Overview
 
-The Consul connector allows you to register services and checks, create and read keys, list the details
- of the services, list the details of checks in a given state such as passing, warning, or critical etc.
+The Consul connector allows you to register services and checks, create and read keys, list the details of the services, and list the details of checks in a given state through the Consul REST API.
 
 **Service Operations**
 
@@ -22,8 +21,8 @@ The `wso2/consul` package contains operations that create entries and get the de
 
 |                                 |       Version                  |
 |  :---------------------------:  |  :---------------------------: |
-|  Ballerina Language     |    0.970.0-rc1                |
-|  Consul API             |   V1                           |
+|  Ballerina Language             |    0.970.0                     |
+|  Consul API                     |   V1                           |
 
 ## Sample
 
