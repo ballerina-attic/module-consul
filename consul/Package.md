@@ -22,7 +22,7 @@ The `wso2/consul` package contains operations that create entries and get the de
 
 |                                 |       Version                  |
 |  :---------------------------:  |  :---------------------------: |
-|  Ballerina Language     |    0.970.0-rc1                |
+|  Ballerina Language     |    0.970.0                |
 |  Consul API             |   V1                           |
 
 ## Sample
