@@ -1,6 +1,7 @@
 # Ballerina Consul Connector
 
-The Consul Connector allows you to register services and checks, create and read keys, list the details of 
+The Consul Connector allows you to register services and checks, deregister services and checks, create, read and 
+delete keys, list the details of 
 the services, list the details of the check by state such as passing, warning, or critical etc.
 
 ## Compatibility

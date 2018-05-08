@@ -276,3 +276,129 @@ public function ConsulConnector::createKey(string keyName, string value) returns
         }
     }
 }
+
+public function ConsulConnector::deregisterService(string serviceId) returns boolean|ConsulError {
+    endpoint http:Client clientEndpoint = self.clientEndpoint;
+    ConsulError consulError = {};
+    string consulPath = DEREGISTER_SERVICE_ENDPOINT + serviceId;
+
+    http:Request request;
+    if (self.aclToken != "") {
+        request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
+    }
+
+    var httpResponse = clientEndpoint->put(consulPath, request = request);
+
+    match httpResponse {
+        error err =>
+        {
+            consulError.message = err.message;
+            consulError.cause = err.cause;
+            return consulError;
+        }
+        http:Response response =>
+        {
+            int statusCode = response.statusCode;
+            if (statusCode == 200) {
+                return true;
+            } else {
+                var consulStringResponse = response.getTextPayload();
+                match consulStringResponse {
+                    error err => {
+                        consulError.message = err.message;
+                        consulError.cause = err.cause;
+                        return consulError;
+                    }
+                    string stringResponse => {
+                        consulError.message = stringResponse;
+                        return consulError;
+                    }
+                }
+            }
+        }
+    }
+}
+
+public function ConsulConnector::deregisterCheck(string checkId) returns (boolean|ConsulError) {
+    endpoint http:Client clientEndpoint = self.clientEndpoint;
+    ConsulError consulError = {};
+    string consulPath = DEREGISTER_CHECK_ENDPOINT + checkId;
+
+    http:Request request;
+    if (self.aclToken != "") {
+        request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
+    }
+
+    var httpResponse = clientEndpoint->put(consulPath, request = request);
+
+    match httpResponse {
+        error err =>
+        {
+            consulError.message = err.message;
+            consulError.cause = err.cause;
+            return consulError;
+        }
+        http:Response response =>
+        {
+            int statusCode = response.statusCode;
+            if (statusCode == 200) {
+                return true;
+            } else {
+                var consulStringResponse = response.getTextPayload();
+                match consulStringResponse {
+                    error err => {
+                        consulError.message = err.message;
+                        consulError.cause = err.cause;
+                        return consulError;
+                    }
+                    string stringResponse => {
+                        consulError.message = stringResponse;
+                        return consulError;
+                    }
+                }
+            }
+        }
+    }
+}
+
+public function ConsulConnector::deleteKey(string keyName) returns (boolean|ConsulError) {
+    endpoint http:Client clientEndpoint = self.clientEndpoint;
+    ConsulError consulError = {};
+    string consulPath = KEY_ENDPOINT + keyName;
+
+    http:Request request;
+    if (self.aclToken != "") {
+        request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
+    }
+
+    var httpResponse = clientEndpoint->delete(consulPath, request = request);
+
+    match httpResponse {
+        error err =>
+        {
+            consulError.message = err.message;
+            consulError.cause = err.cause;
+            return consulError;
+        }
+        http:Response response =>
+        {
+            int statusCode = response.statusCode;
+            if (statusCode == 200) {
+                return true;
+            } else {
+                var consulStringResponse = response.getTextPayload();
+                match consulStringResponse {
+                    error err => {
+                        consulError.message = err.message;
+                        consulError.cause = err.cause;
+                        return consulError;
+                    }
+                    string stringResponse => {
+                        consulError.message = stringResponse;
+                        return consulError;
+                    }
+                }
+            }
+        }
+    }
+}

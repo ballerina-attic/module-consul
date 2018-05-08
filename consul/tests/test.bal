@@ -63,6 +63,25 @@ function testGetService() {
     }
 }
 
+@test:Config {
+    dependsOn:["testGetService"]
+}
+function testDeregisterService() {
+    io:println("--------------Calling deregisterService----------------");
+    string serviceId = "redis";
+    var serviceDeregister = consulClient->deregisterService(serviceId);
+
+    match serviceDeregister {
+        boolean response => {
+            test:assertEquals(response, true, msg = "Failed to call deregisterService()");
+        }
+        ConsulError err => {
+            io:println(err.message);
+            test:assertFail(msg = err.message);
+        }
+    }
+}
+
 @test:Config
 function testRegisterCheck() {
     io:println("--------------Calling registerCheck----------------");
@@ -106,6 +125,25 @@ function testGetCheckByState() {
     }
 }
 
+@test:Config {
+    dependsOn:["testGetCheckByState"]
+}
+function testDeregisterCheck() {
+    io:println("--------------Calling deregisterCheck----------------");
+    string checkId = "mem";
+    var checkDeregister = consulClient->deregisterCheck(checkId);
+
+    match checkDeregister {
+        boolean response => {
+            test:assertEquals(response, true, msg = "Failed to call deregisterCheck()");
+        }
+        ConsulError err => {
+            io:println(err.message);
+            test:assertFail(msg = err.message);
+        }
+    }
+}
+
 @test:Config
 function testCreateKey() {
     io:println("--------------Calling createKey----------------");
@@ -137,6 +175,25 @@ function testReadKey() {
             test:assertNotEquals(response, null, msg = "Failed to call readKey()");
         }
         ConsulError err => {
+            test:assertFail(msg = err.message);
+        }
+    }
+}
+
+@test:Config {
+    dependsOn:["testReadKey"]
+}
+function testDeleteKey() {
+    io:println("--------------Calling deleteKey----------------");
+    string keyName = "foo";
+    var deleteKey = consulClient->deleteKey(keyName);
+
+    match deleteKey {
+        boolean response => {
+            test:assertEquals(response, true, msg = "Failed to call createKey()");
+        }
+        ConsulError err => {
+            io:println(err.message);
             test:assertFail(msg = err.message);
         }
     }

@@ -2,19 +2,24 @@ Connects to Consul from Ballerina.
 
 # Package Overview
 
-The Consul connector allows you to register services and checks, create and read keys, list the details of the services, and list the details of checks in a given state through the Consul REST API.
+The Consul connector allows you to register services and checks, deregister services and checks, create, read and 
+delete keys, list the details of the 
+services, and list the details of checks in a given state through the Consul REST API.
 
 **Service Operations**
 
-The `wso2/consul` package contains operations that register services and get the details of a particular service.
+The `wso2/consul` package contains operations that register services, deregister services and get the details of a 
+particular service.
 
 **Check Operations**
 
-The `wso2/consul` package contains operations that register and get the details of checks of a given state.
+The `wso2/consul` package contains operations that register checks, deregister checks and get the details of checks
+ of a given state.
 
 **Key Operations**
 
-The `wso2/consul` package contains operations that create entries and get the details of a particular key.
+The `wso2/consul` package contains operations that create entries, delete entries and get the details of a particular 
+key.
 
 
 ## Compatibility
@@ -97,6 +102,33 @@ Read the key in Consul with the given `key`.
 var keyValue = consulClient->readKey(key);
 match keyValue {
     Value[] response => io:println(response);
+    ConsulError err => io:println(err);
+}
+```
+
+Deregister services with the given `serviceId`.
+```ballerina
+var serviceDeregister = consulClient->deregisterService(serviceId);
+match serviceDeregister {
+    boolean response => io:println(response);
+    ConsulError err => io:println(err);
+}
+```
+
+Deregister checks with the given `checkId`.
+```ballerina
+var checkDeregister = consulClient->deregisterCheck(checkId);
+match checkDeregister {
+    boolean response => io:println(response);
+    ConsulError err => io:println(err);
+}
+```
+
+Delete entries with the given `keyName`.
+```ballerina
+var deleteKey = consulClient->deleteKey(keyName);
+match deleteKey {
+    boolean response => io:println(response);
     ConsulError err => io:println(err);
 }
 ```
