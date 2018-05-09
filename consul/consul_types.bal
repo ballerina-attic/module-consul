@@ -56,6 +56,22 @@ public type ConsulConnector object {
         P{{value}} Value of the key
         R{{}} If success, returns boolean else returns ConsulError object.}
     public function createKey(string keyName, string value) returns (boolean|ConsulError);
+
+    documentation {Deregister the service
+        P{{serviceId}} The id of the service
+        R{{}} If success, returns boolean else returns ConsulError object.}
+    public function deregisterService(string serviceId) returns (boolean|ConsulError);
+
+    documentation {Deregister the check
+        P{{checkId}} The id of the check
+        R{{}} If success, returns boolean else returns ConsulError object.}
+    public function deregisterCheck(string checkId) returns (boolean|ConsulError);
+
+    documentation {Delete key
+        P{{keyName}} Name of the key
+        R{{}} If success, returns boolean else returns ConsulError object.}
+    public function deleteKey(string keyName) returns (boolean|ConsulError);
+
 };
 
 documentation {Consul Client object

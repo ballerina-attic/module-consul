@@ -1,6 +1,9 @@
 # Compiled class file
 *.class
 
+#conf file
+ballerina.conf
+
 # Log file
 *.log
 
@@ -31,3 +34,4 @@ target
 *.ipr
 .idea
 .ballerina
+target/
