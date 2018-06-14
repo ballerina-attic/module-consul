@@ -27,7 +27,7 @@ public function ConsulConnector::getService(string serviceName) returns CatalogS
         request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
     }
 
-    var httpResponse = clientEndpoint->get(consulPath, request = request);
+    var httpResponse = clientEndpoint->get(consulPath);
     CatalogService[] serviceResponse = [];
 
     match httpResponse {
@@ -71,7 +71,7 @@ public function ConsulConnector::getCheckByState(string state) returns HealthChe
         request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
     }
 
-    var httpResponse = clientEndpoint->get(consulPath, request = request);
+    var httpResponse = clientEndpoint->get(consulPath);
     HealthCheck[] checkResponse = [];
 
     match httpResponse {
@@ -115,7 +115,7 @@ public function ConsulConnector::readKey(string key) returns Value[]|ConsulError
         request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
     }
 
-    var httpResponse = clientEndpoint->get(consulPath, request = request);
+    var httpResponse = clientEndpoint->get(consulPath);
     Value[] keyResponse = [];
 
     match httpResponse {
@@ -159,7 +159,7 @@ public function ConsulConnector::registerService(json jsonPayload) returns (bool
         request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
     }
     request.setJsonPayload(jsonPayload);
-    var httpResponse = clientEndpoint->put(consulPath, request = request);
+    var httpResponse = clientEndpoint->put(consulPath, request);
 
     match httpResponse {
         error err =>
@@ -202,7 +202,7 @@ public function ConsulConnector::registerCheck(json jsonPayload) returns boolean
         request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
     }
     request.setJsonPayload(jsonPayload);
-    var httpResponse = clientEndpoint->put(consulPath, request = request);
+    var httpResponse = clientEndpoint->put(consulPath, request);
 
     match httpResponse {
         error err =>
@@ -245,7 +245,7 @@ public function ConsulConnector::createKey(string keyName, string value) returns
         request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
     }
     request.setJsonPayload(value);
-    var httpResponse = clientEndpoint->put(consulPath, request = request);
+    var httpResponse = clientEndpoint->put(consulPath, request);
 
     match httpResponse {
         error err =>
@@ -287,7 +287,7 @@ public function ConsulConnector::deregisterService(string serviceId) returns boo
         request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
     }
 
-    var httpResponse = clientEndpoint->put(consulPath, request = request);
+    var httpResponse = clientEndpoint->put(consulPath, request);
 
     match httpResponse {
         error err =>
@@ -329,7 +329,7 @@ public function ConsulConnector::deregisterCheck(string checkId) returns (boolea
         request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
     }
 
-    var httpResponse = clientEndpoint->put(consulPath, request = request);
+    var httpResponse = clientEndpoint->put(consulPath, request);
 
     match httpResponse {
         error err =>
@@ -371,7 +371,7 @@ public function ConsulConnector::deleteKey(string keyName) returns (boolean|Cons
         request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
     }
 
-    var httpResponse = clientEndpoint->delete(consulPath, request = request);
+    var httpResponse = clientEndpoint->delete(consulPath, request);
 
     match httpResponse {
         error err =>
