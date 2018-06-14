@@ -16,10 +16,6 @@
 
 import ballerina/http;
 
-public function<ConsulConfiguration consulConfig> ConsulConfiguration() {
-    consulConfig.clientConfig = {};
-}
-
 public function Client::init(ConsulConfiguration consulConfig) {
     self.consulConnector.uri = consulConfig.uri;
     self.consulConnector.aclToken = consulConfig.aclToken;
