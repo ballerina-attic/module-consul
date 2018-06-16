@@ -7,7 +7,7 @@ the services, list the details of the check by state such as passing, warning, o
 ## Compatibility
 | Ballerina Language Version | Consul API version  |
 | -------------------------- | ------------------- |
-|  0.974.1                   | v1                  |
+|  0.975.0                   | v1                  |
 
 
 The following sections provide you with information on how to use the Ballerina Consul Connector.

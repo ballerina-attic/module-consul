@@ -115,4 +115,3 @@ function convertToArray(json jsonValues) returns string[] {
     }
     return serviceTags;
 }
-
