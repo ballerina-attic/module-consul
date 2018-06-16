@@ -26,7 +26,7 @@ key.
 
 |                                 |       Version                  |
 |  :---------------------------:  |  :---------------------------: |
-|  Ballerina Language             |    0.970.0                     |
+|  Ballerina Language             |   0.975.0                     |
 |  Consul API                     |   V1                           |
 
 ## Sample
@@ -48,7 +48,7 @@ You can now enter the token in the Consul client config:
 ```ballerina
 endpoint Client consulClient {
     uri:uri,
-    aclToken:aclToken,
+    aclToken:aclToken
 };
 ```
 
