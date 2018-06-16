@@ -16,15 +16,44 @@
 
 import ballerina/http;
 
-public function<ConsulConfiguration consulConfig> ConsulConfiguration() {
-    consulConfig.clientConfig = {};
+documentation {Consul Client object
+    F{{consulConfig}} Consul connector configurations
+    F{{consulConnector}} Consul Connector object
 }
+public type Client object {
 
-public function Client::init(ConsulConfiguration consulConfig) {
-    self.consulConnector.uri = consulConfig.uri;
-    self.consulConnector.aclToken = consulConfig.aclToken;
-    consulConfig.clientConfig.url = consulConfig.uri;
-    self.consulConnector.clientEndpoint.init(consulConfig.clientConfig);
+    public {
+        ConsulConfiguration consulConfig = {};
+        ConsulConnector consulConnector = new;
+    }
+
+    documentation {Consul connector endpoint initialization function
+        P{{config}} Consul connector configuration
+    }
+    public function init(ConsulConfiguration config);
+
+    documentation {Return the Consul connector client
+        R{{}} Consul connector client
+    }
+    public function getCallerActions() returns ConsulConnector;
+};
+
+documentation {Consul connector configurations can be setup here
+    F{{uri}} The Consul API URL
+    F{{aclToken}} The acl token consul agent
+    F{{clientConfig}} Client endpoint configurations provided by the user
+}
+public type ConsulConfiguration {
+    string uri;
+    string aclToken;
+    http:ClientEndpointConfig clientConfig;
+};
+
+public function Client::init(ConsulConfiguration config) {
+    self.consulConnector.uri = config.uri;
+    self.consulConnector.aclToken = config.aclToken;
+    config.clientConfig.url = config.uri;
+    self.consulConnector.clientEndpoint.init(config.clientConfig);
 }
 
 public function Client::getCallerActions() returns ConsulConnector {

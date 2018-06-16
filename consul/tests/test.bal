@@ -18,12 +18,12 @@ import ballerina/test;
 import ballerina/config;
 import ballerina/io;
 
-string uri = config:getAsString("URI");
-string aclToken = config:getAsString("ACL_TOKEN");
+string testUri = config:getAsString("URI");
+string testAclToken = config:getAsString("ACL_TOKEN");
 
 endpoint Client consulClient {
-    uri:uri,
-    aclToken:aclToken,
+    uri: testUri,
+    aclToken: testAclToken,
     clientConfig:{}
 };
 
