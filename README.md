@@ -20,7 +20,7 @@ The following sections provide you with information on how to use the Ballerina 
 
 Clone the repository by running the following command 
 ```ballerina
-    git clone https://github.com/wso2-ballerina/package-consul.git
+git clone https://github.com/wso2-ballerina/package-consul.git
 ```
 
 ### Working with Consul Connector actions
@@ -31,10 +31,10 @@ be returned. Else ConsulError object will be returned.
 In order for you to use the Consul Connector, first you need to create a Consul Client endpoint.
 
 ```ballerina
-    endpoint Client consulClient {
-         uri:"http://localhost:8500",
-         aclToken:"",
-         clientConfig:{}
+    endpoint consul:Client consulClient {
+         uri: "http://localhost:8500",
+         aclToken: "",
+         clientConfig: {}
     };
 ```
 
@@ -44,22 +44,23 @@ In order for you to use the Consul Connector, first you need to create a Consul 
 import ballerina/io;
 import wso2/consul;
 
-public function main(string[] args) {
-    endpoint Client consulClient {
-        uri:"http://localhost:8500",
-        aclToken:""
-    };
+function main(string... args) {
+    endpoint consul:Client consulClient {
+        uri: "http://localhost:8500",
+        aclToken: "",
+        clientConfig: {}
+};
     
-    json jsonPayload = {"ID":"redis", "Name":"redis1", "Address":"localhost", "port":8000, "EnableTagOverride":false};
-    var serviceRegister = consulClient -> registerService(jsonPayload);
-        match serviceRegister {
-             boolean response => {
-                 test:assertEquals(response, true, msg = "Failed to call registerService()");
-             }
-             ConsulError err => {
-                 io:println(err.message);
-                 test:assertFail(msg = err.message);
-             }
-        }
+json jsonPayload = { "ID":"redis", "Name":"redis1", "Address":"localhost", "port":8000, "EnableTagOverride":false };
+var serviceRegister = consulClient->registerService(jsonPayload);
+    match serviceRegister {
+         boolean response => {
+             test:assertEquals(response, true, msg = "Failed to call registerService()");
+         }
+         consul:ConsulError err => {
+             io:println(err.message);
+             test:assertFail(msg = err.message);
+         }
+    }
 }
 ```

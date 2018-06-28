@@ -10,20 +10,20 @@ or critical etc.
 |  0.975.0                   | v1                  |
 
 
-###### Running tests
+### Running tests
 
 1. Create `ballerina.conf` file in `package-consul`, with following keys and provide values for the variables.
 
-```.conf
-URI=""
-ACL_TOKEN=""
-```
+    ```.conf
+    URI=""
+    ACL_TOKEN=""
+    ```
 
 2. Navigate to the folder package-consul
 
 3. Run tests :
 
-    ```
+    ```shell
     ballerina init
     ballerina test consul --config ballerina.conf
-   ```
+    ```
