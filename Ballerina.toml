@@ -1,8 +1,7 @@
 [project]
 org-name = "wso2"
-version = "0.6.10"
+version = "0.6.11"
 authors = ["WSO2"]
 repository = "https://github.com/wso2-ballerina/package-consul"
 keywords = ["Consul", "endpoint"]
 license = "Apache-2.0"
-homepage = "https://wso2.com/"
