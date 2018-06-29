@@ -13,11 +13,11 @@
 # limitations under the License.
 
 script:
-- BALLERINA_VERSION=0.975.0
+- BALLERINA_VERSION=0.976.1-SNAPSHOT
 - DISTRIBUTION_NAME=ballerina-platform-$BALLERINA_VERSION
 - DOWNLOAD_DIRECTORY=ballerina
 
-- wget -N https://product-dist.ballerina.io/downloads/$BALLERINA_VERSION/$DISTRIBUTION_NAME.zip -P $DOWNLOAD_DIRECTORY
+- wget -N https://product-dist.ballerina.io/nightly/$BALLERINA_VERSION/$DISTRIBUTION_NAME.zip -P $DOWNLOAD_DIRECTORY
 
 - unzip -q $DOWNLOAD_DIRECTORY/$DISTRIBUTION_NAME.zip -d $DOWNLOAD_DIRECTORY
 
