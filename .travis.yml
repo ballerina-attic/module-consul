@@ -13,34 +13,22 @@
 # limitations under the License.
 
 script:
-# Declare STRING variable
-- STRING="Downloading ballerina..."
-
-# Declare variable for Ballerina version
 - BALLERINA_VERSION=0.975.0
 - DISTRIBUTION_NAME=ballerina-platform-$BALLERINA_VERSION
+- DOWNLOAD_DIRECTORY=ballerina
 
-# Print STRING variable
-- echo $STRING
+- wget -N https://product-dist.ballerina.io/downloads/$BALLERINA_VERSION/$DISTRIBUTION_NAME.zip -P $DOWNLOAD_DIRECTORY
 
-# Download Ballerina dist
-- wget -N https://product-dist.ballerina.io/downloads/$BALLERINA_VERSION/$DISTRIBUTION_NAME.zip
+- unzip -q $DOWNLOAD_DIRECTORY/$DISTRIBUTION_NAME.zip
 
-# Unzip the zip file
-- unzip -q $DISTRIBUTION_NAME.zip
+- export PATH=$PATH:$(pwd)/$DOWNLOAD_DIRECTORY/$DISTRIBUTION_NAME/bin
 
-# Add Ballerina to the path variable
-- export PATH=$PATH:$(pwd)/$DISTRIBUTION_NAME/bin
-
-# Print Ballerina version
 - ballerina version
 
-# Init Ballerina project
 - ballerina init
 
-# Run tests
 - ballerina test
 
 cache:
   directories:
-  - $DISTRIBUTION_NAME.zip
+  - $DOWNLOAD_DIRECTORY
