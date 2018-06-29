@@ -35,5 +35,8 @@ script:
 # Print Ballerina version
 - ballerina version
 
+# Init Ballerina project
+- ballerina init
+
 # Run tests
-- ballerina test consul
+- ballerina test
