@@ -23,11 +23,10 @@ key.
 
 
 ## Compatibility
-
-|                                 |       Version                  |
-|  :---------------------------:  |  :---------------------------: |
-|  Ballerina Language             |   0.975.0                     |
-|  Consul API                     |   V1                           |
+|                             |       Version               |
+|:---------------------------:|:---------------------------:|
+|  Ballerina Language         |   0.975.0                   |
+|  Consul API                 |   V1                        |
 
 ## Sample
 
@@ -40,7 +39,7 @@ import wso2/consul;
 **Obtain the ACL Token to Run the Sample**
 
 Obtain the ACL token (required when the ACL bootstrap is enabled in the Consul agent) using the following curl command:
-```ballerina
+```shell
 curl -X PUT http://localhost:8500/v1/acl/bootstrap
 ```
 
