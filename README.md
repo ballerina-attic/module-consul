@@ -42,6 +42,7 @@ In order for you to use the Consul Connector, first you need to create a Consul 
 
 ```ballerina
 import ballerina/io;
+import ballerina/test;
 import wso2/consul;
 
 function main(string... args) {
