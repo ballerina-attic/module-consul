@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/wso2-ballerina/package-consul.svg?branch=master)](https://travis-ci.org/wso2-ballerina/package-consul)
+
 # Ballerina Consul Connector
 
 The Consul Connector allows you to register services and checks, deregister services and checks, create, read and 
