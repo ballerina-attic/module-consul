@@ -22,10 +22,8 @@ documentation {Consul Client object
 }
 public type Client object {
 
-    public {
-        ConsulConfiguration consulConfig = {};
-        ConsulConnector consulConnector = new;
-    }
+    public ConsulConfiguration consulConfig = {};
+    public ConsulConnector consulConnector = new;
 
     documentation {Consul connector endpoint initialization function
         P{{config}} Consul connector configuration
@@ -43,19 +41,19 @@ documentation {Consul connector configurations can be setup here
     F{{aclToken}} The acl token consul agent
     F{{clientConfig}} Client endpoint configurations provided by the user
 }
-public type ConsulConfiguration {
+public type ConsulConfiguration record {
     string uri;
     string aclToken;
     http:ClientEndpointConfig clientConfig;
 };
 
-public function Client::init(ConsulConfiguration config) {
+function Client::init(ConsulConfiguration config) {
     self.consulConnector.uri = config.uri;
     self.consulConnector.aclToken = config.aclToken;
     config.clientConfig.url = config.uri;
     self.consulConnector.clientEndpoint.init(config.clientConfig);
 }
 
-public function Client::getCallerActions() returns ConsulConnector {
+function Client::getCallerActions() returns ConsulConnector {
     return self.consulConnector;
 }

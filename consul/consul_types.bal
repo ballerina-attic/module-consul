@@ -30,7 +30,7 @@ documentation {Struct to define the CatalogService
     F{{createIndex}} An internal index value representing when the service was created
     F{{modifyIndex}} Last index that modified the service
 }
-public type CatalogService {
+public type CatalogService record {
     string id;
     string node;
     string address;
@@ -61,7 +61,7 @@ documentation {Struct to define the HealthCheck
     F{{createIndex}} An internal index value representing when the check was created
     F{{modifyIndex}} Last index that modified the check
 }
-public type HealthCheck {
+public type HealthCheck record {
     string node;
     string checkId;
     string name;
@@ -84,7 +84,7 @@ documentation {Struct to define the Value
     F{{createIndex}} An internal index value representing when the entry was created
     F{{modifyIndex}} Last index that modified the key
 }
-public type Value {
+public type Value record {
     int lockIndex;
     string key;
     int flags;
@@ -97,7 +97,7 @@ documentation {Struct to define the error
     F{{message}} - Error message of the response
     F{{cause}} - The error which caused the Consul error
 }
-public type ConsulError {
+public type ConsulError record {
     string message;
     error? cause;
 };
