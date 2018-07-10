@@ -23,11 +23,9 @@ documentation {Struct to define the Consul connector
      F{{clientEndpoint}} - HTTP client endpoint
 }
 public type ConsulConnector object {
-    public {
-        string uri;
-        string aclToken;
-        http:Client clientEndpoint = new;
-    }
+    public string uri;
+    public string aclToken;
+    public http:Client clientEndpoint = new;
 
     documentation {Get the details of a particular service
         P{{serviceName}} The name of the service
@@ -77,7 +75,7 @@ public type ConsulConnector object {
 
 };
 
-public function ConsulConnector::getService(string serviceName) returns CatalogService[]|ConsulError {
+function ConsulConnector::getService(string serviceName) returns CatalogService[]|ConsulError {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
     ConsulError consulError = {};
     string consulPath = SERVICE_ENDPOINT + serviceName;
@@ -121,7 +119,7 @@ public function ConsulConnector::getService(string serviceName) returns CatalogS
     }
 }
 
-public function ConsulConnector::getCheckByState(string state) returns HealthCheck[]|ConsulError {
+function ConsulConnector::getCheckByState(string state) returns HealthCheck[]|ConsulError {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
     ConsulError consulError = {};
     string consulPath = CHECK_BY_STATE + state;
@@ -165,7 +163,7 @@ public function ConsulConnector::getCheckByState(string state) returns HealthChe
     }
 }
 
-public function ConsulConnector::readKey(string key) returns Value[]|ConsulError {
+function ConsulConnector::readKey(string key) returns Value[]|ConsulError {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
     ConsulError consulError = {};
     string consulPath = KEY_ENDPOINT + key;
@@ -209,7 +207,7 @@ public function ConsulConnector::readKey(string key) returns Value[]|ConsulError
     }
 }
 
-public function ConsulConnector::registerService(json jsonPayload) returns (boolean|ConsulError) {
+function ConsulConnector::registerService(json jsonPayload) returns (boolean|ConsulError) {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
     ConsulError consulError = {};
     string consulPath = REGISTER_SERVICE_ENDPOINT;
@@ -252,7 +250,7 @@ public function ConsulConnector::registerService(json jsonPayload) returns (bool
     }
 }
 
-public function ConsulConnector::registerCheck(json jsonPayload) returns boolean|ConsulError {
+function ConsulConnector::registerCheck(json jsonPayload) returns boolean|ConsulError {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
     ConsulError consulError = {};
     string consulPath = REGISTER_CHECK_ENDPOINT;
@@ -294,7 +292,7 @@ public function ConsulConnector::registerCheck(json jsonPayload) returns boolean
     }
 }
 
-public function ConsulConnector::createKey(string keyName, string value) returns boolean|
+function ConsulConnector::createKey(string keyName, string value) returns boolean|
         ConsulError {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
     ConsulError consulError = {};
@@ -337,7 +335,7 @@ public function ConsulConnector::createKey(string keyName, string value) returns
     }
 }
 
-public function ConsulConnector::deregisterService(string serviceId) returns boolean|ConsulError {
+function ConsulConnector::deregisterService(string serviceId) returns boolean|ConsulError {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
     ConsulError consulError = {};
     string consulPath = DEREGISTER_SERVICE_ENDPOINT + serviceId;
@@ -379,7 +377,7 @@ public function ConsulConnector::deregisterService(string serviceId) returns boo
     }
 }
 
-public function ConsulConnector::deregisterCheck(string checkId) returns (boolean|ConsulError) {
+function ConsulConnector::deregisterCheck(string checkId) returns (boolean|ConsulError) {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
     ConsulError consulError = {};
     string consulPath = DEREGISTER_CHECK_ENDPOINT + checkId;
@@ -421,7 +419,7 @@ public function ConsulConnector::deregisterCheck(string checkId) returns (boolea
     }
 }
 
-public function ConsulConnector::deleteKey(string keyName) returns (boolean|ConsulError) {
+function ConsulConnector::deleteKey(string keyName) returns (boolean|ConsulError) {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
     ConsulError consulError = {};
     string consulPath = KEY_ENDPOINT + keyName;
