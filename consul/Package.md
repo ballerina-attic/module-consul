@@ -25,7 +25,7 @@ key.
 ## Compatibility
 |                             |       Version               |
 |:---------------------------:|:---------------------------:|
-|  Ballerina Language         |   0.980.0                   |
+|  Ballerina Language         |   0.981.0                   |
 |  Consul API                 |   V1                        |
 
 ## Sample

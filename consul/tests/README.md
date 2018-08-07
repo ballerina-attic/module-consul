@@ -7,7 +7,7 @@ or critical etc.
 ## Compatibility
 | Ballerina Language Version | Consul API version  |
 | -------------------------- | ------------------- |
-|  0.980.0                   | v1                  |
+|  0.981.0                   | v1                  |
 
 
 ### Running tests
