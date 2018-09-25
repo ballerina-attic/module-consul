@@ -17,60 +17,59 @@
 import ballerina/io;
 import ballerina/mime;
 
-documentation {Struct to define the Consul connector
-     F{{uri}} - The Consul API URL
-     F{{aclToken}} - The acl token of the consul agent
-     F{{clientEndpoint}} - HTTP client endpoint
-}
+# Struct to define the Consul connector
+# + uri - The Consul API URL
+# + aclToken - The acl token of the consul agent
+# + clientEndpoint - HTTP client endpoint
 public type ConsulConnector object {
     public string uri;
     public string aclToken;
     public http:Client clientEndpoint = new;
 
-    documentation {Get the details of a particular service
-        P{{serviceName}} The name of the service
-        R{{}} If success, returns CatalogService object with basic details, else returns ConsulError object.}
+    # Get the details of a particular service
+    # + serviceName - The name of the service
+    # + return - If success, returns CatalogService object with basic details, else returns ConsulError object.
     public function getService(string serviceName) returns (CatalogService[]|ConsulError);
 
-    documentation {Get the details of the  passing/critical state checks
-        P{{state}} The state of the checks
-        R{{}} If success, returns HealthCheck Object with basic details, else returns ConsulError object.}
+    # Get the details of the  passing/critical state checks
+    # + state - The state of the checks
+    # + return - If success, returns HealthCheck Object with basic details, else returns ConsulError object.
     public function getCheckByState(string state) returns (HealthCheck[]|ConsulError);
 
-    documentation {Get the details of a particular key
-        P{{key}} The path of the key to read
-        R{{}} If success, returns Value Object with basic details, else returns ConsulError object.}
+    # Get the details of a particular key
+    # + key - The path of the key to read
+    # + return - If success, returns Value Object with basic details, else returns ConsulError object.
     public function readKey(string key) returns (Value[]|ConsulError);
 
-    documentation {Register the service
-        P{{jsonPayload}} The details of the service
-        R{{}} If success, returns boolean else returns ConsulError object.}
+    # Register the service
+    # + jsonPayload - The details of the service
+    # + return - If success, returns boolean else returns ConsulError object.
     public function registerService(json jsonPayload) returns (boolean|ConsulError);
 
-    documentation {Register the check
-        P{{jsonPayload}} The details of the check
-        R{{}} If success, returns boolean else returns ConsulError object.}
+    # Register the check
+    # + jsonPayload - The details of the check
+    # + return - If success, returns boolean else returns ConsulError object.
     public function registerCheck(json jsonPayload) returns (boolean|ConsulError);
 
-    documentation {Create the key
-        P{{keyName}} Name of the key
-        P{{value}} Value of the key
-        R{{}} If success, returns boolean else returns ConsulError object.}
+    # Create the key
+    # + keyName - Name of the key
+    # + value - Value of the key
+    # + return - If success, returns boolean else returns ConsulError object.
     public function createKey(string keyName, string value) returns (boolean|ConsulError);
 
-    documentation {Deregister the service
-        P{{serviceId}} The id of the service
-        R{{}} If success, returns boolean else returns ConsulError object.}
+    # Deregister the service
+    # + serviceId - The id of the service
+    # + return - If success, returns boolean else returns ConsulError object.
     public function deregisterService(string serviceId) returns (boolean|ConsulError);
 
-    documentation {Deregister the check
-        P{{checkId}} The id of the check
-        R{{}} If success, returns boolean else returns ConsulError object.}
+    # Deregister the check
+    # + checkId - The id of the check
+    # + return - If success, returns boolean else returns ConsulError object.
     public function deregisterCheck(string checkId) returns (boolean|ConsulError);
 
-    documentation {Delete key
-        P{{keyName}} Name of the key
-        R{{}} If success, returns boolean else returns ConsulError object.}
+    # Delete key
+    # + keyName - Name of the key
+    # + return - If success, returns boolean else returns ConsulError object.
     public function deleteKey(string keyName) returns (boolean|ConsulError);
 
 };

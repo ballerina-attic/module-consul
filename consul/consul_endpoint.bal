@@ -16,31 +16,27 @@
 
 import ballerina/http;
 
-documentation {Consul Client object
-    F{{consulConfig}} Consul connector configurations
-    F{{consulConnector}} Consul Connector object
-}
+# Consul Client object
+# + consulConfig -  Consul connector configurations
+# + consulConnector -  Consul Connector object
 public type Client object {
 
     public ConsulConfiguration consulConfig = {};
     public ConsulConnector consulConnector = new;
 
-    documentation {Consul connector endpoint initialization function
-        P{{config}} Consul connector configuration
-    }
+    # Consul connector endpoint initialization function
+    # + config -  Consul connector configuration
     public function init(ConsulConfiguration config);
 
-    documentation {Return the Consul connector client
-        R{{}} Consul connector client
-    }
+    # Return the Consul connector client
+    # + return - Consul connector client
     public function getCallerActions() returns ConsulConnector;
 };
 
-documentation {Consul connector configurations can be setup here
-    F{{uri}} The Consul API URL
-    F{{aclToken}} The acl token consul agent
-    F{{clientConfig}} Client endpoint configurations provided by the user
-}
+# Consul connector configurations can be setup here
+# + uri -  The Consul API URL
+# + aclToken -  The acl token consul agent
+# + clientConfig -  Client endpoint configurations provided by the user
 public type ConsulConfiguration record {
     string uri;
     string aclToken;
