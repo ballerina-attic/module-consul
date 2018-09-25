@@ -17,7 +17,7 @@
 import ballerina/io;
 import ballerina/mime;
 
-# Struct to define the Consul connector
+# Define the Consul Connector.
 # + uri - The Consul API URL
 # + aclToken - The acl token of the consul agent
 # + clientEndpoint - HTTP client endpoint
@@ -26,48 +26,48 @@ public type ConsulConnector object {
     public string aclToken;
     public http:Client clientEndpoint = new;
 
-    # Get the details of a particular service
+    # Get the details of a particular service.
     # + serviceName - The name of the service
     # + return - If success, returns CatalogService object with basic details, else returns ConsulError object.
     public function getService(string serviceName) returns (CatalogService[]|ConsulError);
 
-    # Get the details of the  passing/critical state checks
+    # Get the details of the  passing/critical state checks.
     # + state - The state of the checks
     # + return - If success, returns HealthCheck Object with basic details, else returns ConsulError object.
     public function getCheckByState(string state) returns (HealthCheck[]|ConsulError);
 
-    # Get the details of a particular key
+    # Get the details of a particular key.
     # + key - The path of the key to read
     # + return - If success, returns Value Object with basic details, else returns ConsulError object.
     public function readKey(string key) returns (Value[]|ConsulError);
 
-    # Register the service
+    # Register the service.
     # + jsonPayload - The details of the service
     # + return - If success, returns boolean else returns ConsulError object.
     public function registerService(json jsonPayload) returns (boolean|ConsulError);
 
-    # Register the check
+    # Register the check.
     # + jsonPayload - The details of the check
     # + return - If success, returns boolean else returns ConsulError object.
     public function registerCheck(json jsonPayload) returns (boolean|ConsulError);
 
-    # Create the key
+    # Create the key.
     # + keyName - Name of the key
     # + value - Value of the key
     # + return - If success, returns boolean else returns ConsulError object.
     public function createKey(string keyName, string value) returns (boolean|ConsulError);
 
-    # Deregister the service
+    # Deregister the service.
     # + serviceId - The id of the service
     # + return - If success, returns boolean else returns ConsulError object.
     public function deregisterService(string serviceId) returns (boolean|ConsulError);
 
-    # Deregister the check
+    # Deregister the check.
     # + checkId - The id of the check
     # + return - If success, returns boolean else returns ConsulError object.
     public function deregisterCheck(string checkId) returns (boolean|ConsulError);
 
-    # Delete key
+    # Delete key.
     # + keyName - Name of the key
     # + return - If success, returns boolean else returns ConsulError object.
     public function deleteKey(string keyName) returns (boolean|ConsulError);

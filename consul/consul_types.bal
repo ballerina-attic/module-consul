@@ -14,11 +14,11 @@
 // specific language governing permissions and limitations
 // under the License.
 
-# Struct to define the CatalogService
+# Struct to define the CatalogService.
 # + id - UUID assigned to the service
 # + node - Name of the Consul node on which the service is registered
 # + address - IP address of the Consul node on which the service is registered
-# + datacenter - Data center of the Consul node on which the service is registered.
+# + datacenter - Data center of the Consul node on which the service is registered
 # + taggedAddresses - List of explicit LAN and WAN IP addresses for the agent
 # + nodeMeta - List of user-defined metadata key/value pairs for the node
 # + serviceId -  A unique service instance identifier
@@ -46,7 +46,7 @@ public type CatalogService record {
     int modifyIndex;
 };
 
-# Struct to define the HealthCheck
+# Struct to define the HealthCheck.
 # + node - Name or ID of the node
 # + checkId - Id of the check
 # + name - Name of the check
@@ -74,8 +74,8 @@ public type HealthCheck record {
     int modifyIndex;
 };
 
-# Struct to define the Value
-# + lockIndex - The number of times this key has successfully been acquired in a lock.
+# Struct to define the Value.
+# + lockIndex - The number of times this key has successfully been acquired in a lock
 # + key - Full path of the entry.
 # + flags - An opaque unsigned integer that can be attached to each entry
 # + value - A base64-encoded blob of data.
@@ -90,7 +90,7 @@ public type Value record {
     int modifyIndex;
 };
 
-# Struct to define the error
+# Struct to define the error.
 # + message - - Error message of the response
 # + cause - - The error which caused the Consul error
 public type ConsulError record {
