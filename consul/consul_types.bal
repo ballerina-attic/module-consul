@@ -14,22 +14,21 @@
 // specific language governing permissions and limitations
 // under the License.
 
-documentation {Struct to define the CatalogService
-    F{{id}} UUID assigned to the service
-    F{{node}} Name of the Consul node on which the service is registered
-    F{{address}} IP address of the Consul node on which the service is registered
-    F{{datacenter}} Data center of the Consul node on which the service is registered.
-    F{{taggedAddresses}} List of explicit LAN and WAN IP addresses for the agent
-    F{{nodeMeta}} List of user-defined metadata key/value pairs for the node
-    F{{serviceId}}  A unique service instance identifier
-    F{{serviceName}} Name of the service
-    F{{serviceTags}}  List of tags for the service
-    F{{serviceAddress}} The IP address of the service host
-    F{{servicePort}} Port number of the service
-    F{{serviceEnableTagOverride}} Indicates whether service tags can be overridden on this service
-    F{{createIndex}} An internal index value representing when the service was created
-    F{{modifyIndex}} Last index that modified the service
-}
+# Struct to define the CatalogService.
+# + id - UUID assigned to the service
+# + node - Name of the Consul node on which the service is registered
+# + address - IP address of the Consul node on which the service is registered
+# + datacenter - Data center of the Consul node on which the service is registered
+# + taggedAddresses - List of explicit LAN and WAN IP addresses for the agent
+# + nodeMeta - List of user-defined metadata key/value pairs for the node
+# + serviceId -  A unique service instance identifier
+# + serviceName - Name of the service
+# + serviceTags -  List of tags for the service
+# + serviceAddress - The IP address of the service host
+# + servicePort - Port number of the service
+# + serviceEnableTagOverride - Indicates whether service tags can be overridden on this service
+# + createIndex - An internal index value representing when the service was created
+# + modifyIndex - Last index that modified the service
 public type CatalogService record {
     string id;
     string node;
@@ -47,20 +46,19 @@ public type CatalogService record {
     int modifyIndex;
 };
 
-documentation {Struct to define the HealthCheck
-    F{{node}} Name or ID of the node
-    F{{checkId}} Id of the check
-    F{{name}} Name of the check
-    F{{status}} Status of the check
-    F{{notes}} Arbitrary information for humans
-    F{{output}} A human-readable message
-    F{{serviceId}} Id of the service
-    F{{serviceName}} Name of the service
-    F{{serviceTags}} List of tags for the service
-    F{{definition}} Definition of the check
-    F{{createIndex}} An internal index value representing when the check was created
-    F{{modifyIndex}} Last index that modified the check
-}
+# Struct to define the HealthCheck.
+# + node - Name or ID of the node
+# + checkId - Id of the check
+# + name - Name of the check
+# + status - Status of the check
+# + notes - Arbitrary information for humans
+# + output - A human-readable message
+# + serviceId - Id of the service
+# + serviceName - Name of the service
+# + serviceTags - List of tags for the service
+# + definition - Definition of the check
+# + createIndex - An internal index value representing when the check was created
+# + modifyIndex - Last index that modified the check
 public type HealthCheck record {
     string node;
     string checkId;
@@ -76,14 +74,13 @@ public type HealthCheck record {
     int modifyIndex;
 };
 
-documentation {Struct to define the Value
-    F{{lockIndex}} The number of times this key has successfully been acquired in a lock.
-    F{{key}} Full path of the entry.
-    F{{flags}} An opaque unsigned integer that can be attached to each entry
-    F{{value}} A base64-encoded blob of data.
-    F{{createIndex}} An internal index value representing when the entry was created
-    F{{modifyIndex}} Last index that modified the key
-}
+# Struct to define the Value.
+# + lockIndex - The number of times this key has successfully been acquired in a lock
+# + key - Full path of the entry.
+# + flags - An opaque unsigned integer that can be attached to each entry
+# + value - A base64-encoded blob of data.
+# + createIndex - An internal index value representing when the entry was created
+# + modifyIndex - Last index that modified the key
 public type Value record {
     int lockIndex;
     string key;
@@ -93,10 +90,9 @@ public type Value record {
     int modifyIndex;
 };
 
-documentation {Struct to define the error
-    F{{message}} - Error message of the response
-    F{{cause}} - The error which caused the Consul error
-}
+# Struct to define the error.
+# + message - - Error message of the response
+# + cause - - The error which caused the Consul error
 public type ConsulError record {
     string message;
     error? cause;
