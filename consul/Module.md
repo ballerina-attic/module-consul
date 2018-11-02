@@ -1,6 +1,6 @@
 Connects to Consul from Ballerina.
 
-# Package Overview
+# Module Overview
 
 The Consul connector allows you to register services and checks, deregister services and checks, create, read and 
 delete keys, list the details of the 
@@ -8,29 +8,29 @@ services, and list the details of checks in a given state through the Consul RES
 
 **Service Operations**
 
-The `wso2/consul` package contains operations that register services, deregister services and get the details of a 
+The `wso2/consul` module contains operations that register services, deregister services and get the details of a 
 particular service.
 
 **Check Operations**
 
-The `wso2/consul` package contains operations that register checks, deregister checks and get the details of checks
+The `wso2/consul` module contains operations that register checks, deregister checks and get the details of checks
  of a given state.
 
 **Key Operations**
 
-The `wso2/consul` package contains operations that create entries, delete entries and get the details of a particular 
+The `wso2/consul` module contains operations that create entries, delete entries and get the details of a particular 
 key.
 
 
 ## Compatibility
 |                             |       Version               |
 |:---------------------------:|:---------------------------:|
-|  Ballerina Language         |   0.982.0                   |
+|  Ballerina Language         |   0.983.0                   |
 |  Consul API                 |   V1                        |
 
 ## Sample
 
-First, import the `wso2/consul` package into the Ballerina project.
+First, import the `wso2/consul` module into the Ballerina project.
 
 ```ballerina
 import wso2/consul;

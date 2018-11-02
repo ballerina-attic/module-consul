@@ -7,19 +7,19 @@ or critical etc.
 ## Compatibility
 | Ballerina Language Version | Consul API version  |
 | -------------------------- | ------------------- |
-|  0.982.0                   | v1                  |
+|  0.983.0                   | v1                  |
 
 
 ### Running tests
 
-1. Create `ballerina.conf` file in `package-consul`, with following keys and provide values for the variables.
+1. Create `ballerina.conf` file in `module-consul`, with following keys and provide values for the variables.
 
     ```.conf
     URI=""
     ACL_TOKEN=""
     ```
 
-2. Navigate to the folder package-consul
+2. Navigate to the folder module-consul
 
 3. Run tests :
 

@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/wso2-ballerina/package-consul.svg?branch=master)](https://travis-ci.org/wso2-ballerina/package-consul)
+[![Build Status](https://travis-ci.org/wso2-ballerina/module-consul.svg?branch=master)](https://travis-ci.org/wso2-ballerina/module-consul)
 
 # Ballerina Consul Connector
 
@@ -9,7 +9,7 @@ the services, list the details of the check by state such as passing, warning, o
 ## Compatibility
 | Ballerina Language Version | Consul API version  |
 | -------------------------- | ------------------- |
-|  0.982.0                   | v1                  |
+|  0.983.0                   | v1                  |
 
 
 The following sections provide you with information on how to use the Ballerina Consul Connector.
@@ -22,7 +22,7 @@ The following sections provide you with information on how to use the Ballerina 
 
 Clone the repository by running the following command 
 ```ballerina
-git clone https://github.com/wso2-ballerina/package-consul.git
+git clone https://github.com/wso2-ballerina/module-consul.git
 ```
 
 ### Working with Consul Connector actions
