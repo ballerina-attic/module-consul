@@ -28,55 +28,54 @@ public type ConsulConnector object {
 
     # Get the details of a particular service.
     # + serviceName - The name of the service
-    # + return - If success, returns CatalogService object with basic details, else returns ConsulError object.
-    public function getService(string serviceName) returns (CatalogService[]|ConsulError);
+    # + return - If success, returns CatalogService object with basic details, else returns error object.
+    public function getService(string serviceName) returns (CatalogService[]|error);
 
     # Get the details of the  passing/critical state checks.
     # + state - The state of the checks
-    # + return - If success, returns HealthCheck Object with basic details, else returns ConsulError object.
-    public function getCheckByState(string state) returns (HealthCheck[]|ConsulError);
+    # + return - If success, returns HealthCheck Object with basic details, else returns error object.
+    public function getCheckByState(string state) returns (HealthCheck[]|error);
 
     # Get the details of a particular key.
     # + key - The path of the key to read
-    # + return - If success, returns Value Object with basic details, else returns ConsulError object.
-    public function readKey(string key) returns (Value[]|ConsulError);
+    # + return - If success, returns Value Object with basic details, else returns error object.
+    public function readKey(string key) returns (Value[]|error);
 
     # Register the service.
     # + jsonPayload - The details of the service
-    # + return - If success, returns boolean else returns ConsulError object.
-    public function registerService(json jsonPayload) returns (boolean|ConsulError);
+    # + return - If success, returns boolean else returns error object.
+    public function registerService(json jsonPayload) returns (boolean|error);
 
     # Register the check.
     # + jsonPayload - The details of the check
-    # + return - If success, returns boolean else returns ConsulError object.
-    public function registerCheck(json jsonPayload) returns (boolean|ConsulError);
+    # + return - If success, returns boolean else returns error object.
+    public function registerCheck(json jsonPayload) returns (boolean|error);
 
     # Create the key.
     # + keyName - Name of the key
     # + value - Value of the key
-    # + return - If success, returns boolean else returns ConsulError object.
-    public function createKey(string keyName, string value) returns (boolean|ConsulError);
+    # + return - If success, returns boolean else returns error object.
+    public function createKey(string keyName, string value) returns (boolean|error);
 
     # Deregister the service.
     # + serviceId - The id of the service
-    # + return - If success, returns boolean else returns ConsulError object.
-    public function deregisterService(string serviceId) returns (boolean|ConsulError);
+    # + return - If success, returns boolean else returns error object.
+    public function deregisterService(string serviceId) returns (boolean|error);
 
     # Deregister the check.
     # + checkId - The id of the check
-    # + return - If success, returns boolean else returns ConsulError object.
-    public function deregisterCheck(string checkId) returns (boolean|ConsulError);
+    # + return - If success, returns boolean else returns error object.
+    public function deregisterCheck(string checkId) returns (boolean|error);
 
     # Delete key.
     # + keyName - Name of the key
-    # + return - If success, returns boolean else returns ConsulError object.
-    public function deleteKey(string keyName) returns (boolean|ConsulError);
+    # + return - If success, returns boolean else returns error object.
+    public function deleteKey(string keyName) returns (boolean|error);
 
 };
 
-function ConsulConnector::getService(string serviceName) returns CatalogService[]|ConsulError {
+function ConsulConnector::getService(string serviceName) returns CatalogService[]|error {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
-    ConsulError consulError = {};
     string consulPath = SERVICE_ENDPOINT + serviceName;
 
     http:Request request;
@@ -90,9 +89,7 @@ function ConsulConnector::getService(string serviceName) returns CatalogService[
     match httpResponse {
         error err =>
         {
-            consulError.message = err.message;
-            consulError.cause = err.cause;
-            return consulError;
+            return err;
         }
         http:Response response =>
         {
@@ -100,17 +97,16 @@ function ConsulConnector::getService(string serviceName) returns CatalogService[
             var consulJSONResponse = response.getJsonPayload();
             match consulJSONResponse {
                 error err => {
-                    consulError.message = err.message;
-                    consulError.cause = err.cause;
-                    return consulError;
+                    return err;
                 }
                 json jsonResponse => {
                     if (statusCode == 200) {
                         serviceResponse = convertToCatalogServices(jsonResponse);
                         return serviceResponse;
                     } else {
-                        consulError.message = jsonResponse.errors[0].message.toString();
-                        return consulError;
+                        error err = {};
+                        err.message = jsonResponse.errors[0].message.toString();
+                        return err;
                     }
                 }
             }
@@ -118,9 +114,8 @@ function ConsulConnector::getService(string serviceName) returns CatalogService[
     }
 }
 
-function ConsulConnector::getCheckByState(string state) returns HealthCheck[]|ConsulError {
+function ConsulConnector::getCheckByState(string state) returns HealthCheck[]|error {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
-    ConsulError consulError = {};
     string consulPath = CHECK_BY_STATE + state;
 
     http:Request request;
@@ -134,9 +129,7 @@ function ConsulConnector::getCheckByState(string state) returns HealthCheck[]|Co
     match httpResponse {
         error err =>
         {
-            consulError.message = err.message;
-            consulError.cause = err.cause;
-            return consulError;
+            return err;
         }
         http:Response response =>
         {
@@ -144,17 +137,14 @@ function ConsulConnector::getCheckByState(string state) returns HealthCheck[]|Co
             var consulJSONResponse = response.getJsonPayload();
             match consulJSONResponse {
                 error err => {
-                    consulError.message = err.message;
-                    consulError.cause = err.cause;
-                    return consulError;
+                    return err;
                 }
                 json jsonResponse => {
                     if (statusCode == 200) {
                         checkResponse = convertToHealthClients(jsonResponse);
                         return checkResponse;
                     } else {
-                        consulError.message = jsonResponse.error.message.toString();
-                        return consulError;
+                        return setJsonResponseError(jsonResponse);
                     }
                 }
             }
@@ -162,9 +152,8 @@ function ConsulConnector::getCheckByState(string state) returns HealthCheck[]|Co
     }
 }
 
-function ConsulConnector::readKey(string key) returns Value[]|ConsulError {
+function ConsulConnector::readKey(string key) returns Value[]|error {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
-    ConsulError consulError = {};
     string consulPath = KEY_ENDPOINT + key;
 
     http:Request request;
@@ -178,9 +167,7 @@ function ConsulConnector::readKey(string key) returns Value[]|ConsulError {
     match httpResponse {
         error err =>
         {
-            consulError.message = err.message;
-            consulError.cause = err.cause;
-            return consulError;
+            return err;
         }
         http:Response response =>
         {
@@ -188,17 +175,14 @@ function ConsulConnector::readKey(string key) returns Value[]|ConsulError {
             var consulJSONResponse = response.getJsonPayload();
             match consulJSONResponse {
                 error err => {
-                    consulError.message = err.message;
-                    consulError.cause = err.cause;
-                    return consulError;
+                    return err;
                 }
                 json jsonResponse => {
                     if (statusCode == 200) {
                         keyResponse = convertToValues(jsonResponse);
                         return keyResponse;
                     } else {
-                        consulError.message = jsonResponse.error.message.toString();
-                        return consulError;
+                        return setJsonResponseError(jsonResponse);
                     }
                 }
             }
@@ -206,9 +190,8 @@ function ConsulConnector::readKey(string key) returns Value[]|ConsulError {
     }
 }
 
-function ConsulConnector::registerService(json jsonPayload) returns (boolean|ConsulError) {
+function ConsulConnector::registerService(json jsonPayload) returns (boolean|error) {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
-    ConsulError consulError = {};
     string consulPath = REGISTER_SERVICE_ENDPOINT;
 
     http:Request request;
@@ -221,9 +204,7 @@ function ConsulConnector::registerService(json jsonPayload) returns (boolean|Con
     match httpResponse {
         error err =>
         {
-            consulError.message = err.message;
-            consulError.cause = err.cause;
-            return consulError;
+            return err;
         }
         http:Response response =>
         {
@@ -234,13 +215,10 @@ function ConsulConnector::registerService(json jsonPayload) returns (boolean|Con
                 var consulStringResponse = response.getTextPayload();
                 match consulStringResponse {
                     error err => {
-                        consulError.message = err.message;
-                        consulError.cause = err.cause;
-                        return consulError;
+                        return err;
                     }
                     string stringResponse => {
-                        consulError.message = stringResponse;
-                        return consulError;
+                        return setStringResponseError(stringResponse);
                     }
                 }
             }
@@ -249,9 +227,8 @@ function ConsulConnector::registerService(json jsonPayload) returns (boolean|Con
     }
 }
 
-function ConsulConnector::registerCheck(json jsonPayload) returns boolean|ConsulError {
+function ConsulConnector::registerCheck(json jsonPayload) returns boolean|error {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
-    ConsulError consulError = {};
     string consulPath = REGISTER_CHECK_ENDPOINT;
 
     http:Request request;
@@ -264,9 +241,7 @@ function ConsulConnector::registerCheck(json jsonPayload) returns boolean|Consul
     match httpResponse {
         error err =>
         {
-            consulError.message = err.message;
-            consulError.cause = err.cause;
-            return consulError;
+            return err;
         }
         http:Response response =>
         {
@@ -277,13 +252,10 @@ function ConsulConnector::registerCheck(json jsonPayload) returns boolean|Consul
                 var consulStringResponse = response.getTextPayload();
                 match consulStringResponse {
                     error err => {
-                        consulError.message = err.message;
-                        consulError.cause = err.cause;
-                        return consulError;
+                        return err;
                     }
                     string stringResponse => {
-                        consulError.message = stringResponse;
-                        return consulError;
+                        return setStringResponseError(stringResponse);
                     }
                 }
             }
@@ -291,10 +263,8 @@ function ConsulConnector::registerCheck(json jsonPayload) returns boolean|Consul
     }
 }
 
-function ConsulConnector::createKey(string keyName, string value) returns boolean|
-        ConsulError {
+function ConsulConnector::createKey(string keyName, string value) returns boolean|error {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
-    ConsulError consulError = {};
     string consulPath = KEY_ENDPOINT + keyName;
 
     http:Request request;
@@ -307,9 +277,7 @@ function ConsulConnector::createKey(string keyName, string value) returns boolea
     match httpResponse {
         error err =>
         {
-            consulError.message = err.message;
-            consulError.cause = err.cause;
-            return consulError;
+            return err;
         }
         http:Response response =>
         {
@@ -320,13 +288,10 @@ function ConsulConnector::createKey(string keyName, string value) returns boolea
                 var consulStringResponse = response.getTextPayload();
                 match consulStringResponse {
                     error err => {
-                        consulError.message = err.message;
-                        consulError.cause = err.cause;
-                        return consulError;
+                        return err;
                     }
                     string stringResponse => {
-                        consulError.message = stringResponse;
-                        return consulError;
+                        return setStringResponseError(stringResponse);
                     }
                 }
             }
@@ -334,9 +299,8 @@ function ConsulConnector::createKey(string keyName, string value) returns boolea
     }
 }
 
-function ConsulConnector::deregisterService(string serviceId) returns boolean|ConsulError {
+function ConsulConnector::deregisterService(string serviceId) returns boolean|error {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
-    ConsulError consulError = {};
     string consulPath = DEREGISTER_SERVICE_ENDPOINT + serviceId;
 
     http:Request request;
@@ -349,9 +313,7 @@ function ConsulConnector::deregisterService(string serviceId) returns boolean|Co
     match httpResponse {
         error err =>
         {
-            consulError.message = err.message;
-            consulError.cause = err.cause;
-            return consulError;
+            return err;
         }
         http:Response response =>
         {
@@ -362,13 +324,10 @@ function ConsulConnector::deregisterService(string serviceId) returns boolean|Co
                 var consulStringResponse = response.getTextPayload();
                 match consulStringResponse {
                     error err => {
-                        consulError.message = err.message;
-                        consulError.cause = err.cause;
-                        return consulError;
+                        return err;
                     }
                     string stringResponse => {
-                        consulError.message = stringResponse;
-                        return consulError;
+                        return setStringResponseError(stringResponse);
                     }
                 }
             }
@@ -376,9 +335,8 @@ function ConsulConnector::deregisterService(string serviceId) returns boolean|Co
     }
 }
 
-function ConsulConnector::deregisterCheck(string checkId) returns (boolean|ConsulError) {
+function ConsulConnector::deregisterCheck(string checkId) returns boolean|error {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
-    ConsulError consulError = {};
     string consulPath = DEREGISTER_CHECK_ENDPOINT + checkId;
 
     http:Request request;
@@ -391,9 +349,7 @@ function ConsulConnector::deregisterCheck(string checkId) returns (boolean|Consu
     match httpResponse {
         error err =>
         {
-            consulError.message = err.message;
-            consulError.cause = err.cause;
-            return consulError;
+            return err;
         }
         http:Response response =>
         {
@@ -404,13 +360,10 @@ function ConsulConnector::deregisterCheck(string checkId) returns (boolean|Consu
                 var consulStringResponse = response.getTextPayload();
                 match consulStringResponse {
                     error err => {
-                        consulError.message = err.message;
-                        consulError.cause = err.cause;
-                        return consulError;
+                        return err;
                     }
                     string stringResponse => {
-                        consulError.message = stringResponse;
-                        return consulError;
+                        return setStringResponseError(stringResponse);
                     }
                 }
             }
@@ -418,9 +371,8 @@ function ConsulConnector::deregisterCheck(string checkId) returns (boolean|Consu
     }
 }
 
-function ConsulConnector::deleteKey(string keyName) returns (boolean|ConsulError) {
+function ConsulConnector::deleteKey(string keyName) returns boolean|error {
     endpoint http:Client clientEndpoint = self.clientEndpoint;
-    ConsulError consulError = {};
     string consulPath = KEY_ENDPOINT + keyName;
 
     http:Request request;
@@ -433,9 +385,7 @@ function ConsulConnector::deleteKey(string keyName) returns (boolean|ConsulError
     match httpResponse {
         error err =>
         {
-            consulError.message = err.message;
-            consulError.cause = err.cause;
-            return consulError;
+            return err;
         }
         http:Response response =>
         {
@@ -446,16 +396,25 @@ function ConsulConnector::deleteKey(string keyName) returns (boolean|ConsulError
                 var consulStringResponse = response.getTextPayload();
                 match consulStringResponse {
                     error err => {
-                        consulError.message = err.message;
-                        consulError.cause = err.cause;
-                        return consulError;
+                        return err;
                     }
                     string stringResponse => {
-                        consulError.message = stringResponse;
-                        return consulError;
+                        return setStringResponseError(stringResponse);
                     }
                 }
             }
         }
     }
+}
+
+function setJsonResponseError(json response) returns error {
+    error err = {};
+    err.message = response.error.message.toString();
+    return err;
+}
+
+function setStringResponseError(string response) returns error {
+    error err = {};
+    err.message = response;
+    return err;
 }

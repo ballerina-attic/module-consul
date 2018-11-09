@@ -37,7 +37,7 @@ function testRegisterService() {
         boolean response => {
             test:assertEquals(response, true, msg = "Failed to call registerService()");
         }
-        ConsulError err => {
+        error err => {
             io:println(err.message);
             test:assertFail(msg = err.message);
         }
@@ -56,7 +56,7 @@ function testGetService() {
         CatalogService[] response => {
             test:assertNotEquals(response, null, msg = "Failed to call getService()");
         }
-        ConsulError err => {
+        error err => {
             io:println(err.message);
             test:assertFail(msg = err.message);
         }
@@ -75,7 +75,7 @@ function testDeregisterService() {
         boolean response => {
             test:assertEquals(response, true, msg = "Failed to call deregisterService()");
         }
-        ConsulError err => {
+        error err => {
             io:println(err.message);
             test:assertFail(msg = err.message);
         }
@@ -99,7 +99,7 @@ function testRegisterCheck() {
         boolean response => {
             test:assertEquals(response, true, msg = "Failed to call registerCheck()");
         }
-        ConsulError err => {
+        error err => {
             io:println(err.message);
             test:assertFail(msg = err.message);
         }
@@ -119,7 +119,7 @@ function testGetCheckByState() {
         HealthCheck[] response => {
             test:assertNotEquals(response, null, msg = "Failed to call getCheckByState()");
         }
-        ConsulError err => {
+        error err => {
             test:assertFail(msg = err.message);
         }
     }
@@ -137,7 +137,7 @@ function testDeregisterCheck() {
         boolean response => {
             test:assertEquals(response, true, msg = "Failed to call deregisterCheck()");
         }
-        ConsulError err => {
+        error err => {
             io:println(err.message);
             test:assertFail(msg = err.message);
         }
@@ -155,7 +155,7 @@ function testCreateKey() {
         boolean response => {
             test:assertEquals(response, true, msg = "Failed to call createKey()");
         }
-        ConsulError err => {
+        error err => {
             io:println(err.message);
             test:assertFail(msg = err.message);
         }
@@ -174,7 +174,7 @@ function testReadKey() {
         Value[] response => {
             test:assertNotEquals(response, null, msg = "Failed to call readKey()");
         }
-        ConsulError err => {
+        error err => {
             test:assertFail(msg = err.message);
         }
     }
@@ -192,7 +192,7 @@ function testDeleteKey() {
         boolean response => {
             test:assertEquals(response, true, msg = "Failed to call createKey()");
         }
-        ConsulError err => {
+        error err => {
             io:println(err.message);
             test:assertFail(msg = err.message);
         }

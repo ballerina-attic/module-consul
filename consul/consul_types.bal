@@ -89,11 +89,3 @@ public type Value record {
     int createIndex;
     int modifyIndex;
 };
-
-# Struct to define the error.
-# + message - - Error message of the response
-# + cause - - The error which caused the Consul error
-public type ConsulError record {
-    string message;
-    error? cause;
-};
