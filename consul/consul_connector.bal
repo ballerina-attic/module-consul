@@ -28,48 +28,48 @@ public type ConsulConnector object {
 
     # Get the details of a particular service.
     # + serviceName - The name of the service
-    # + return - If success, returns CatalogService object with basic details, else returns error object.
+    # + return - If success, returns CatalogService object with basic details, else returns error.
     public function getService(string serviceName) returns (CatalogService[]|error);
 
     # Get the details of the  passing/critical state checks.
     # + state - The state of the checks
-    # + return - If success, returns HealthCheck Object with basic details, else returns error object.
+    # + return - If success, returns HealthCheck Object with basic details, else returns error.
     public function getCheckByState(string state) returns (HealthCheck[]|error);
 
     # Get the details of a particular key.
     # + key - The path of the key to read
-    # + return - If success, returns Value Object with basic details, else returns error object.
+    # + return - If success, returns Value Object with basic details, else returns error.
     public function readKey(string key) returns (Value[]|error);
 
     # Register the service.
     # + jsonPayload - The details of the service
-    # + return - If success, returns boolean else returns error object.
+    # + return - If success, returns boolean else returns error.
     public function registerService(json jsonPayload) returns (boolean|error);
 
     # Register the check.
     # + jsonPayload - The details of the check
-    # + return - If success, returns boolean else returns error object.
+    # + return - If success, returns boolean else returns error.
     public function registerCheck(json jsonPayload) returns (boolean|error);
 
     # Create the key.
     # + keyName - Name of the key
     # + value - Value of the key
-    # + return - If success, returns boolean else returns error object.
+    # + return - If success, returns boolean else returns error.
     public function createKey(string keyName, string value) returns (boolean|error);
 
     # Deregister the service.
     # + serviceId - The id of the service
-    # + return - If success, returns boolean else returns error object.
+    # + return - If success, returns boolean else returns error.
     public function deregisterService(string serviceId) returns (boolean|error);
 
     # Deregister the check.
     # + checkId - The id of the check
-    # + return - If success, returns boolean else returns error object.
+    # + return - If success, returns boolean else returns error.
     public function deregisterCheck(string checkId) returns (boolean|error);
 
     # Delete key.
     # + keyName - Name of the key
-    # + return - If success, returns boolean else returns error object.
+    # + return - If success, returns boolean else returns error.
     public function deleteKey(string keyName) returns (boolean|error);
 
 };
