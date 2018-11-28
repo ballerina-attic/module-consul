@@ -56,7 +56,7 @@ Register services in Consul with the given `jsonPayload`.
 var serviceRegister = consulClient->registerService(jsonPayload);
 match serviceRegister {
     boolean response => io:println(response);
-    consul:ConsulError err => io:println(err);
+    error err => io:println(err);
 }
 ```
 
@@ -65,7 +65,7 @@ Get the details of the service with the given `serviceName`.
 var serviceDetails = consulClient->getService(serviceName);
 match serviceDetails {
     consul:CatalogService[] response => io:println(response);
-    consul:ConsulError err => io:println(err);
+    error err => io:println(err);
 }
 ```
 
@@ -74,7 +74,7 @@ Register a check in Consul with the given `jsonCheck`.
 var checkRegister = consulClient->registerCheck(jsonCheck);
 match checkRegister {
     boolean response => io:println(response);
-    consul:ConsulError err => io:println(err);
+    error err => io:println(err);
 }
 ```
 
@@ -83,7 +83,7 @@ Get the details of checks with the given `state`.
 var checkDetails = consulClient->getCheckByState(state);
 match checkDetails {
     HealthCheck[] response => io:println(response);
-    consul:ConsulError err => io:println(err);
+    error err => io:println(err);
 }
 ```
 
@@ -92,7 +92,7 @@ Create the entry in Consul with the given `keyName` and `value`.
 var keyRegister = consulClient->createKey(keyName, value);
 match keyRegister {
     boolean response => io:println(response);
-    consul:ConsulError err => io:println(err);
+    error err => io:println(err);
 }
 ```
 
@@ -101,7 +101,7 @@ Read the key in Consul with the given `key`.
 var keyValue = consulClient->readKey(key);
 match keyValue {
     consul:Value[] response => io:println(response);
-    consul:ConsulError err => io:println(err);
+    error err => io:println(err);
 }
 ```
 
@@ -110,7 +110,7 @@ Deregister services with the given `serviceId`.
 var serviceDeregister = consulClient->deregisterService(serviceId);
 match serviceDeregister {
     boolean response => io:println(response);
-    consul:ConsulError err => io:println(err);
+    error err => io:println(err);
 }
 ```
 
@@ -119,7 +119,7 @@ Deregister checks with the given `checkId`.
 var checkDeregister = consulClient->deregisterCheck(checkId);
 match checkDeregister {
     boolean response => io:println(response);
-    consul:ConsulError err => io:println(err);
+    error err => io:println(err);
 }
 ```
 
@@ -128,6 +128,6 @@ Delete entries with the given `keyName`.
 var deleteKey = consulClient->deleteKey(keyName);
 match deleteKey {
     boolean response => io:println(response);
-    consul:ConsulError err => io:println(err);
+    error err => io:println(err);
 }
 ```
