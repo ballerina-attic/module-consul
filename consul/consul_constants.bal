@@ -17,13 +17,15 @@
 //
 
 //Consul API endpoint
-@final string SERVICE_ENDPOINT = "/v1/catalog/service/";
-@final string CHECK_BY_STATE = "/v1/health/state/";
-@final string REGISTER_SERVICE_ENDPOINT = "/v1/agent/service/register";
-@final string DEREGISTER_SERVICE_ENDPOINT = "/v1/agent/service/deregister/";
-@final string REGISTER_CHECK_ENDPOINT = "/v1/agent/check/register";
-@final string DEREGISTER_CHECK_ENDPOINT = "/v1/agent/check/deregister/";
-@final string KEY_ENDPOINT = "/v1/kv/";
-
+final string SERVICE_ENDPOINT = "/v1/catalog/service/";
+final string CHECK_BY_STATE = "/v1/health/state/";
+final string REGISTER_SERVICE_ENDPOINT = "/v1/agent/service/register";
+final string DEREGISTER_SERVICE_ENDPOINT = "/v1/agent/service/deregister/";
+final string REGISTER_CHECK_ENDPOINT = "/v1/agent/check/register";
+final string DEREGISTER_CHECK_ENDPOINT = "/v1/agent/check/deregister/";
+final string KEY_ENDPOINT = "/v1/kv/";
 //string constants
-@final string CONSUL_TOKEN_HEADER = "X-Consul-Token";
+final string CONSUL_TOKEN_HEADER = "X-Consul-Token";
+
+//Error Codes
+final string CONSUL_ERROR_CODE = "(wso2/consul)ConsulError";

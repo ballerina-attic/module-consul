@@ -95,7 +95,12 @@ function convertValues(json jsonStatus) returns Value {
 function convertToInt(json jsonVal) returns int {
     string stringVal = jsonVal.toString();
     if (stringVal != "") {
-        return check <int>stringVal;
+        var value = int.create(stringVal);
+        if (value is int) {
+            return value;
+        } else {
+            return 0;
+        }
     } else {
         return 0;
     }
@@ -103,7 +108,7 @@ function convertToInt(json jsonVal) returns int {
 
 function convertToBoolean(json jsonVal) returns (boolean) {
     string stringVal = jsonVal.toString();
-    return <boolean>stringVal;
+    return boolean.create(stringVal);
 }
 
 function convertToArray(json jsonValues) returns string[] {

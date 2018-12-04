@@ -18,403 +18,317 @@ import ballerina/io;
 import ballerina/mime;
 
 # Define the Consul Connector.
-# + uri - The Consul API URL
 # + aclToken - The acl token of the consul agent
-# + clientEndpoint - HTTP client endpoint
-public type ConsulConnector object {
-    public string uri;
+# + consulClient - HTTP client endpoint
+public type ConsulConnector client object {
+
     public string aclToken;
-    public http:Client clientEndpoint = new;
+    public http:Client consulClient;
+
+    public function __init(string url, ConsulConfiguration consulConfig) {
+        self.consulClient = new (url, config = consulConfig.clientConfig);
+        self.aclToken = consulConfig.aclToken;
+    }
 
     # Get the details of a particular service.
     # + serviceName - The name of the service
     # + return - If success, returns CatalogService object with basic details, else returns error.
-    public function getService(string serviceName) returns (CatalogService[]|error);
+    remote function getService(string serviceName) returns CatalogService[]|error;
 
     # Get the details of the  passing/critical state checks.
     # + state - The state of the checks
     # + return - If success, returns HealthCheck Object with basic details, else returns error.
-    public function getCheckByState(string state) returns (HealthCheck[]|error);
+    remote function getCheckByState(string state) returns HealthCheck[]|error;
 
     # Get the details of a particular key.
     # + key - The path of the key to read
     # + return - If success, returns Value Object with basic details, else returns error.
-    public function readKey(string key) returns (Value[]|error);
+    remote function readKey(string key) returns Value[]|error;
 
     # Register the service.
     # + jsonPayload - The details of the service
     # + return - If success, returns boolean else returns error.
-    public function registerService(json jsonPayload) returns (boolean|error);
+    remote function registerService(json jsonPayload) returns boolean|error;
 
     # Register the check.
     # + jsonPayload - The details of the check
     # + return - If success, returns boolean else returns error.
-    public function registerCheck(json jsonPayload) returns (boolean|error);
+    remote function registerCheck(json jsonPayload) returns boolean|error;
 
     # Create the key.
     # + keyName - Name of the key
     # + value - Value of the key
     # + return - If success, returns boolean else returns error.
-    public function createKey(string keyName, string value) returns (boolean|error);
+    remote function createKey(string keyName, string value) returns boolean|error;
 
     # Deregister the service.
     # + serviceId - The id of the service
     # + return - If success, returns boolean else returns error.
-    public function deregisterService(string serviceId) returns (boolean|error);
+    remote function deregisterService(string serviceId) returns boolean|error;
 
     # Deregister the check.
     # + checkId - The id of the check
     # + return - If success, returns boolean else returns error.
-    public function deregisterCheck(string checkId) returns (boolean|error);
+    remote function deregisterCheck(string checkId) returns boolean|error;
 
     # Delete key.
     # + keyName - Name of the key
     # + return - If success, returns boolean else returns error.
-    public function deleteKey(string keyName) returns (boolean|error);
+    remote function deleteKey(string keyName) returns boolean|error;
 
 };
 
-function ConsulConnector::getService(string serviceName) returns CatalogService[]|error {
-    endpoint http:Client clientEndpoint = self.clientEndpoint;
+remote function ConsulConnector.getService(string serviceName) returns CatalogService[]|error {
     string consulPath = SERVICE_ENDPOINT + serviceName;
 
-    http:Request request;
+    http:Request request = new;
     if (self.aclToken != "") {
         request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
     }
 
-    var httpResponse = clientEndpoint->get(consulPath, message = request);
+    var httpResponse = self.consulClient->get(consulPath, message = request);
     CatalogService[] serviceResponse = [];
 
-    match httpResponse {
-        error err =>
-        {
-            return err;
-        }
-        http:Response response =>
-        {
-            int statusCode = response.statusCode;
-            var consulJSONResponse = response.getJsonPayload();
-            match consulJSONResponse {
-                error err => {
-                    return err;
-                }
-                json jsonResponse => {
-                    if (statusCode == 200) {
-                        serviceResponse = convertToCatalogServices(jsonResponse);
-                        return serviceResponse;
-                    } else {
-                        error err = {};
-                        err.message = jsonResponse.errors[0].message.toString();
-                        return err;
-                    }
-                }
+    if (httpResponse is error) {
+        return httpResponse;
+    } else {
+        int statusCode = httpResponse.statusCode;
+        var consulJSONResponse = httpResponse.getJsonPayload();
+        if (consulJSONResponse is error) {
+            return consulJSONResponse;
+        } else {
+            if (statusCode == 200) {
+                serviceResponse = convertToCatalogServices(consulJSONResponse);
+                return serviceResponse;
+            } else {
+                error err = error(CONSUL_ERROR_CODE,{message: consulJSONResponse.errors[0].message.toString()});
+                return err;
             }
         }
     }
 }
 
-function ConsulConnector::getCheckByState(string state) returns HealthCheck[]|error {
-    endpoint http:Client clientEndpoint = self.clientEndpoint;
+remote function ConsulConnector.getCheckByState(string state) returns HealthCheck[]|error {
     string consulPath = CHECK_BY_STATE + state;
 
-    http:Request request;
+    http:Request request = new;
     if (self.aclToken != "") {
         request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
     }
 
-    var httpResponse = clientEndpoint->get(consulPath, message = request);
+    var httpResponse = self.consulClient->get(consulPath, message = request);
     HealthCheck[] checkResponse = [];
-
-    match httpResponse {
-        error err =>
-        {
-            return err;
-        }
-        http:Response response =>
-        {
-            int statusCode = response.statusCode;
-            var consulJSONResponse = response.getJsonPayload();
-            match consulJSONResponse {
-                error err => {
-                    return err;
-                }
-                json jsonResponse => {
-                    if (statusCode == 200) {
-                        checkResponse = convertToHealthClients(jsonResponse);
-                        return checkResponse;
-                    } else {
-                        return setJsonResponseError(jsonResponse);
-                    }
-                }
+    if (httpResponse is error) {
+        return httpResponse;
+    } else {
+        int statusCode = httpResponse.statusCode;
+        var consulJSONResponse = httpResponse.getJsonPayload();
+        if (consulJSONResponse is error) {
+            return consulJSONResponse;
+        } else {
+            if (statusCode == 200) {
+                checkResponse = convertToHealthClients(consulJSONResponse);
+                return checkResponse;
+            } else {
+                return setJsonResponseError(consulJSONResponse);
             }
         }
     }
 }
 
-function ConsulConnector::readKey(string key) returns Value[]|error {
-    endpoint http:Client clientEndpoint = self.clientEndpoint;
+remote function ConsulConnector.readKey(string key) returns Value[]|error {
     string consulPath = KEY_ENDPOINT + key;
 
-    http:Request request;
+    http:Request request = new;
     if (self.aclToken != "") {
         request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
     }
 
-    var httpResponse = clientEndpoint->get(consulPath, message = request);
+    var httpResponse = self.consulClient->get(consulPath, message = request);
     Value[] keyResponse = [];
 
-    match httpResponse {
-        error err =>
-        {
-            return err;
-        }
-        http:Response response =>
-        {
-            int statusCode = response.statusCode;
-            var consulJSONResponse = response.getJsonPayload();
-            match consulJSONResponse {
-                error err => {
-                    return err;
-                }
-                json jsonResponse => {
-                    if (statusCode == 200) {
-                        keyResponse = convertToValues(jsonResponse);
-                        return keyResponse;
-                    } else {
-                        return setJsonResponseError(jsonResponse);
-                    }
-                }
+    if (httpResponse is error) {
+        return httpResponse;
+    } else {
+        int statusCode = httpResponse.statusCode;
+        var consulJSONResponse = httpResponse.getJsonPayload();
+        if (consulJSONResponse is error) {
+            return consulJSONResponse;
+        } else {
+            if (statusCode == 200) {
+                keyResponse = convertToValues(consulJSONResponse);
+                return keyResponse;
+            } else {
+                return setJsonResponseError(consulJSONResponse);
             }
         }
     }
 }
 
-function ConsulConnector::registerService(json jsonPayload) returns (boolean|error) {
-    endpoint http:Client clientEndpoint = self.clientEndpoint;
+remote function ConsulConnector.registerService(json jsonPayload) returns (boolean|error) {
     string consulPath = REGISTER_SERVICE_ENDPOINT;
 
-    http:Request request;
+    http:Request request = new;
     if (self.aclToken != "") {
         request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
     }
     request.setJsonPayload(jsonPayload);
-    var httpResponse = clientEndpoint->put(consulPath, request);
+    var httpResponse = self.consulClient->put(consulPath, request);
 
-    match httpResponse {
-        error err =>
-        {
-            return err;
-        }
-        http:Response response =>
-        {
-            int statusCode = response.statusCode;
-            if (statusCode == 200) {
-                return true;
+    if (httpResponse is error) {
+        return httpResponse;
+    } else {
+        int statusCode = httpResponse.statusCode;
+        if (statusCode == 200) {
+            return true;
+        } else {
+            var consulStringResponse = httpResponse.getTextPayload();
+            if (consulStringResponse is error) {
+                return consulStringResponse;
             } else {
-                var consulStringResponse = response.getTextPayload();
-                match consulStringResponse {
-                    error err => {
-                        return err;
-                    }
-                    string stringResponse => {
-                        return setStringResponseError(stringResponse);
-                    }
-                }
+                return setStringResponseError(consulStringResponse);
             }
         }
-
     }
 }
 
-function ConsulConnector::registerCheck(json jsonPayload) returns boolean|error {
-    endpoint http:Client clientEndpoint = self.clientEndpoint;
+remote function ConsulConnector.registerCheck(json jsonPayload) returns boolean|error {
     string consulPath = REGISTER_CHECK_ENDPOINT;
 
-    http:Request request;
+    http:Request request = new;
     if (self.aclToken != "") {
         request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
     }
     request.setJsonPayload(jsonPayload);
-    var httpResponse = clientEndpoint->put(consulPath, request);
+    var httpResponse = self.consulClient->put(consulPath, request);
 
-    match httpResponse {
-        error err =>
-        {
-            return err;
-        }
-        http:Response response =>
-        {
-            int statusCode = response.statusCode;
-            if (statusCode == 200) {
-                return true;
+    if (httpResponse is error) {
+        return httpResponse;
+    } else {
+        int statusCode = httpResponse.statusCode;
+        if (statusCode == 200) {
+            return true;
+        } else {
+            var consulStringResponse = httpResponse.getTextPayload();
+            if (consulStringResponse is error) {
+                return consulStringResponse;
             } else {
-                var consulStringResponse = response.getTextPayload();
-                match consulStringResponse {
-                    error err => {
-                        return err;
-                    }
-                    string stringResponse => {
-                        return setStringResponseError(stringResponse);
-                    }
-                }
+                return setStringResponseError(consulStringResponse);
             }
         }
     }
 }
 
-function ConsulConnector::createKey(string keyName, string value) returns boolean|error {
-    endpoint http:Client clientEndpoint = self.clientEndpoint;
+remote function ConsulConnector.createKey(string keyName, string value) returns boolean|error {
     string consulPath = KEY_ENDPOINT + keyName;
 
-    http:Request request;
+    http:Request request = new;
     if (self.aclToken != "") {
         request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
     }
     request.setJsonPayload(value);
-    var httpResponse = clientEndpoint->put(consulPath, request);
-
-    match httpResponse {
-        error err =>
-        {
-            return err;
-        }
-        http:Response response =>
-        {
-            int statusCode = response.statusCode;
-            if (statusCode == 200) {
-                return true;
+    var httpResponse = self.consulClient->put(consulPath, request);
+    if (httpResponse is error) {
+        return httpResponse;
+    } else {
+    int statusCode = httpResponse.statusCode;
+        if (statusCode == 200) {
+            return true;
+        } else {
+            var consulStringResponse = httpResponse.getTextPayload();
+            if (consulStringResponse is error) {
+                return consulStringResponse;
             } else {
-                var consulStringResponse = response.getTextPayload();
-                match consulStringResponse {
-                    error err => {
-                        return err;
-                    }
-                    string stringResponse => {
-                        return setStringResponseError(stringResponse);
-                    }
-                }
+                return setStringResponseError(consulStringResponse);
             }
         }
     }
 }
 
-function ConsulConnector::deregisterService(string serviceId) returns boolean|error {
-    endpoint http:Client clientEndpoint = self.clientEndpoint;
+remote function ConsulConnector.deregisterService(string serviceId) returns boolean|error {
     string consulPath = DEREGISTER_SERVICE_ENDPOINT + serviceId;
 
-    http:Request request;
+    http:Request request = new;
     if (self.aclToken != "") {
         request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
     }
 
-    var httpResponse = clientEndpoint->put(consulPath, request);
-
-    match httpResponse {
-        error err =>
-        {
-            return err;
-        }
-        http:Response response =>
-        {
-            int statusCode = response.statusCode;
-            if (statusCode == 200) {
-                return true;
+    var httpResponse = self.consulClient->put(consulPath, request);
+    if (httpResponse is error) {
+        return httpResponse;
+    } else {
+        int statusCode = httpResponse.statusCode;
+        if (statusCode == 200) {
+            return true;
+        } else {
+            var consulStringResponse = httpResponse.getTextPayload();
+            if (consulStringResponse is error) {
+                return consulStringResponse;
             } else {
-                var consulStringResponse = response.getTextPayload();
-                match consulStringResponse {
-                    error err => {
-                        return err;
-                    }
-                    string stringResponse => {
-                        return setStringResponseError(stringResponse);
-                    }
-                }
+                return setStringResponseError(consulStringResponse);
             }
         }
     }
 }
 
-function ConsulConnector::deregisterCheck(string checkId) returns boolean|error {
-    endpoint http:Client clientEndpoint = self.clientEndpoint;
+remote function ConsulConnector.deregisterCheck(string checkId) returns boolean|error {
     string consulPath = DEREGISTER_CHECK_ENDPOINT + checkId;
 
-    http:Request request;
+    http:Request request = new;
     if (self.aclToken != "") {
         request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
     }
 
-    var httpResponse = clientEndpoint->put(consulPath, request);
-
-    match httpResponse {
-        error err =>
-        {
-            return err;
-        }
-        http:Response response =>
-        {
-            int statusCode = response.statusCode;
-            if (statusCode == 200) {
-                return true;
+    var httpResponse = self.consulClient->put(consulPath, request);
+    if (httpResponse is error) {
+        return httpResponse;
+    } else {
+        int statusCode = httpResponse.statusCode;
+        if (statusCode == 200) {
+            return true;
+        } else {
+            var consulStringResponse = httpResponse.getTextPayload();
+            if (consulStringResponse is error) {
+                return consulStringResponse;
             } else {
-                var consulStringResponse = response.getTextPayload();
-                match consulStringResponse {
-                    error err => {
-                        return err;
-                    }
-                    string stringResponse => {
-                        return setStringResponseError(stringResponse);
-                    }
-                }
+                return setStringResponseError(consulStringResponse);
             }
         }
     }
 }
 
-function ConsulConnector::deleteKey(string keyName) returns boolean|error {
-    endpoint http:Client clientEndpoint = self.clientEndpoint;
+remote function ConsulConnector.deleteKey(string keyName) returns boolean|error {
     string consulPath = KEY_ENDPOINT + keyName;
 
-    http:Request request;
+    http:Request request = new;
     if (self.aclToken != "") {
         request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
     }
 
-    var httpResponse = clientEndpoint->delete(consulPath, request);
-
-    match httpResponse {
-        error err =>
-        {
-            return err;
-        }
-        http:Response response =>
-        {
-            int statusCode = response.statusCode;
-            if (statusCode == 200) {
-                return true;
+    var httpResponse = self.consulClient->delete(consulPath, request);
+    if (httpResponse is error) {
+        return httpResponse;
+    } else {
+        int statusCode = httpResponse.statusCode;
+        if (statusCode == 200) {
+            return true;
+        } else {
+            var consulStringResponse = httpResponse.getTextPayload();
+            if (consulStringResponse is error) {
+                return consulStringResponse;
             } else {
-                var consulStringResponse = response.getTextPayload();
-                match consulStringResponse {
-                    error err => {
-                        return err;
-                    }
-                    string stringResponse => {
-                        return setStringResponseError(stringResponse);
-                    }
-                }
+                return setStringResponseError(consulStringResponse);
             }
         }
     }
 }
 
 function setJsonResponseError(json response) returns error {
-    error err = {};
-    err.message = response.error.message.toString();
+    error err = error(CONSUL_ERROR_CODE,{message: response["error"].message.toString()});
     return err;
 }
 
 function setStringResponseError(string response) returns error {
-    error err = {};
-    err.message = response;
+    error err = error(CONSUL_ERROR_CODE,{ message: response});
     return err;
 }

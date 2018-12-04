@@ -25,7 +25,7 @@ key.
 ## Compatibility
 |                             |       Version               |
 |:---------------------------:|:---------------------------:|
-|  Ballerina Language         |   0.983.0                   |
+|  Ballerina Language         |   0.990.0                   |
 |  Consul API                 |   V1                        |
 
 ## Sample
@@ -45,89 +45,101 @@ curl -X PUT http://localhost:8500/v1/acl/bootstrap
 
 You can now enter the token in the Consul client config:
 ```ballerina
-endpoint consul:Client consulClient {
-    uri:uri,
-    aclToken:aclToken
+ConsulConfiguration consulConfig = {
+    uri: "http://localhost:8500",
+    aclToken: "",
+    clientConfig: {}
 };
+    
+Client consulClient = new(consulConfig);
 ```
 
 Register services in Consul with the given `jsonPayload`.
 ```ballerina
 var serviceRegister = consulClient->registerService(jsonPayload);
-match serviceRegister {
-    boolean response => io:println(response);
-    error err => io:println(err);
+if (serviceRegister is boolean) {
+   io:println(serviceRegister);
+} else {
+   io:println(<string>serviceRegister.detail().message);
 }
 ```
 
 Get the details of the service with the given `serviceName`.
 ```ballerina
 var serviceDetails = consulClient->getService(serviceName);
-match serviceDetails {
-    consul:CatalogService[] response => io:println(response);
-    error err => io:println(err);
+if (serviceDetails is consul:CatalogService[]) {
+   io:println(serviceDetails);
+} else {
+   io:println(<string>serviceDetails.detail().message);
 }
 ```
 
 Register a check in Consul with the given `jsonCheck`.
 ```ballerina
 var checkRegister = consulClient->registerCheck(jsonCheck);
-match checkRegister {
-    boolean response => io:println(response);
-    error err => io:println(err);
+if (checkRegister is boolean) {
+   io:println(checkRegister);
+} else {
+   io:println(<string>checkRegister.detail().message);
 }
 ```
 
 Get the details of checks with the given `state`.
 ```ballerina
 var checkDetails = consulClient->getCheckByState(state);
-match checkDetails {
-    HealthCheck[] response => io:println(response);
-    error err => io:println(err);
+if (checkDetails is consul:HealthCheck[]) {
+   io:println(checkDetails);
+} else {
+   io:println(<string>checkDetails.detail().message);
 }
 ```
 
 Create the entry in Consul with the given `keyName` and `value`.
 ```ballerina
 var keyRegister = consulClient->createKey(keyName, value);
-match keyRegister {
-    boolean response => io:println(response);
-    error err => io:println(err);
+if (keyRegister is boolean) {
+   io:println(keyRegister);
+} else {
+   io:println(<string>keyRegister.detail().message);
 }
 ```
 
 Read the key in Consul with the given `key`.
 ```ballerina
 var keyValue = consulClient->readKey(key);
-match keyValue {
-    consul:Value[] response => io:println(response);
-    error err => io:println(err);
+if (keyValue is consul:Value[]) {
+   io:println(keyValue);
+} else {
+   io:println(<string>keyValue.detail().message);
 }
 ```
 
 Deregister services with the given `serviceId`.
 ```ballerina
 var serviceDeregister = consulClient->deregisterService(serviceId);
-match serviceDeregister {
-    boolean response => io:println(response);
-    error err => io:println(err);
+if (serviceDeregister is boolean) {
+   io:println(serviceDeregister);
+} else {
+   io:println(<string>serviceDeregister.detail().message);
 }
 ```
 
 Deregister checks with the given `checkId`.
 ```ballerina
 var checkDeregister = consulClient->deregisterCheck(checkId);
-match checkDeregister {
-    boolean response => io:println(response);
-    error err => io:println(err);
+if (checkDeregister is boolean) {
+   io:println(checkDeregister);
+} else {
+   io:println(<string>checkDeregister.detail().message);
 }
 ```
 
 Delete entries with the given `keyName`.
 ```ballerina
 var deleteKey = consulClient->deleteKey(keyName);
-match deleteKey {
-    boolean response => io:println(response);
-    error err => io:println(err);
+if (deleteKey is boolean) {
+   io:println(deleteKey);
+} else {
+   io:println(<string>deleteKey.detail().message);
 }
 ```

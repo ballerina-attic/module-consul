@@ -17,39 +17,76 @@
 import ballerina/http;
 
 # Consul Client object.
-# + consulConfig -  Consul Connector configurations
-# + consulConnector -  Consul Connector object
-public type Client object {
+# + consulConnector - ConsulConnector Connector object
+public type Client client object {
 
-    public ConsulConfiguration consulConfig = {};
-    public ConsulConnector consulConnector = new;
+    public ConsulConnector consulConnector;
 
-    # Consul Connector endpoint initialization function.
-    # + config -  Consul Connector Configuration
-    public function init(ConsulConfiguration config);
+    public function __init(ConsulConfiguration consulConfig) {
+        self.consulConnector = new (consulConfig.uri, consulConfig);
+    }
 
-    # Return the Consul Connector Client.
-    # + return - Consul Connector Client
-    public function getCallerActions() returns ConsulConnector;
+    # Get the details of a particular service.
+    # + serviceName - The name of the service
+    # + return - If success, returns CatalogService object with basic details, else returns error.
+    remote function getService(string serviceName) returns CatalogService[]|error {
+        return self.consulConnector->getService(serviceName);
+    }
+
+    # Get the details of the  passing / critical state checks.
+    # + state - The state of the checks
+    # + return - If success, returns HealthCheck Object with basic details, else returns error.
+    remote function getCheckByState(string state) returns HealthCheck[]|error {
+        return self.consulConnector->getCheckByState(state);
+    }
+
+    # Get the details of a particular key.
+    # + key - The path of the key to read
+    # + return - If success, returns Value Object with basic details, else returns error.
+    remote function readKey(string key) returns Value[]|error {
+        return self.consulConnector->readKey(key);
+    }
+
+    # Register the service.
+    # + jsonPayload - The details of the service
+    # + return - If success, returns boolean else returns error.
+    remote function registerService(json jsonPayload) returns boolean|error {
+        return self.consulConnector->registerService(jsonPayload);
+    }
+
+    # Register the check .
+    # + jsonPayload - The details of the check
+    # + return - If success, returns boolean else returns error.
+    remote function registerCheck(json jsonPayload) returns boolean|error {
+        return self.consulConnector->registerCheck(jsonPayload);
+    }
+
+    # Create the key.
+    # + keyName - Name of the key
+    # + value - Value of the key
+    # + return - If success, returns boolean else returns error.
+    remote function createKey(string keyName, string value) returns boolean|error {
+        return self.consulConnector->createKey(keyName, value);
+    }
+
+    # Deregister the service.
+    # + serviceId - The id of the service
+    # + return - If success, returns boolean else returns error.
+    remote function deregisterService(string serviceId) returns boolean|error {
+        return self.consulConnector->deregisterService(serviceId);
+    }
+
+    # Deregister the check .
+    # + checkId - The id of the check
+    # + return - If success, returns boolean else returns error.
+    remote function deregisterCheck(string checkId) returns boolean|error {
+        return self.consulConnector->deregisterCheck(checkId);
+    }
+
+    # Delete key.
+    # + keyName - Name of the key
+    # + return - If success, returns boolean else returns error.
+    remote function deleteKey(string keyName) returns boolean|error {
+        return self.consulConnector->deleteKey(keyName);
+    }
 };
-
-# Consul Connector configurations can be setup here.
-# + uri -  The Consul API URL
-# + aclToken -  The acl token consul agent
-# + clientConfig -  Client endpoint configurations provided by the user
-public type ConsulConfiguration record {
-    string uri;
-    string aclToken;
-    http:ClientEndpointConfig clientConfig;
-};
-
-function Client::init(ConsulConfiguration config) {
-    self.consulConnector.uri = config.uri;
-    self.consulConnector.aclToken = config.aclToken;
-    config.clientConfig.url = config.uri;
-    self.consulConnector.clientEndpoint.init(config.clientConfig);
-}
-
-function Client::getCallerActions() returns ConsulConnector {
-    return self.consulConnector;
-}
