@@ -24,7 +24,7 @@ function convertToCatalogService(json jsonStatus) returns (CatalogService) {
     catalogService.nodeMeta = jsonStatus.NodeMeta != null ? jsonStatus.NodeMeta.toString() : "";
     catalogService.serviceId = jsonStatus.ServiceID != null ? jsonStatus.ServiceID.toString() : "";
     catalogService.serviceName = jsonStatus.ServiceName != null ? jsonStatus.ServiceName.toString() : "";
-    catalogService.serviceTags = jsonStatus.ServiceTags != null ? convertToArray(jsonStatus.ServiceTags) : [];
+    catalogService.serviceTags = jsonStatus.ServiceTags != null ? convertToArray(<json[]>jsonStatus.ServiceTags) : [];
     catalogService.serviceAddress = jsonStatus.ServiceAddress != null ? jsonStatus.ServiceAddress.toString() : "";
     catalogService.servicePort = jsonStatus.ServicePort != null ? convertToInt(jsonStatus.ServicePort) : 0;
     catalogService.serviceEnableTagOverride = jsonStatus.ServiceEnableTagOverride != null ? convertToBoolean
@@ -34,20 +34,20 @@ function convertToCatalogService(json jsonStatus) returns (CatalogService) {
     return catalogService;
 }
 
-function convertToHealthClients(json jsonStatuses) returns HealthCheck[] {
+function convertToHealthClients(json[] jsonStatuses) returns HealthCheck[] {
     HealthCheck[] healthCheck = [];
     int i = 0;
-    foreach jsonStatus in jsonStatuses {
+    foreach json jsonStatus in jsonStatuses {
         healthCheck[i] = convertHealthClient(jsonStatus);
         i = i + 1;
     }
     return healthCheck;
 }
 
-function convertToCatalogServices(json jsonStatuses) returns CatalogService[] {
+function convertToCatalogServices(json[] jsonStatuses) returns CatalogService[] {
     CatalogService[] catalogService = [];
     int i = 0;
-    foreach jsonStatus in jsonStatuses {
+    foreach json jsonStatus in jsonStatuses {
         catalogService[i] = convertToCatalogService(jsonStatus);
         i = i + 1;
     }
@@ -64,17 +64,17 @@ function convertHealthClient(json jsonStatus) returns HealthCheck {
     healthCheck.output = jsonStatus.Output != null ? jsonStatus.Output.toString() : "";
     healthCheck.serviceId = jsonStatus.ServiceID != null ? jsonStatus.ServiceID.toString() : "";
     healthCheck.serviceName = jsonStatus.ServiceName != null ? jsonStatus.ServiceName.toString() : "";
-    healthCheck.serviceTags = jsonStatus.ServiceTags != null ? convertToArray(jsonStatus.ServiceTags) : [];
+    healthCheck.serviceTags = jsonStatus.ServiceTags != null ? convertToArray(<json[]>jsonStatus.ServiceTags) : [];
     healthCheck.definition = jsonStatus.Definition != null ? jsonStatus.Definition.toString() : "";
     healthCheck.createIndex = jsonStatus.CreateIndex != null ? convertToInt(jsonStatus.CreateIndex) : 0;
     healthCheck.modifyIndex = jsonStatus.ModifyIndex != null ? convertToInt(jsonStatus.ModifyIndex)  : 0;
     return healthCheck;
 }
 
-function convertToValues(json jsonStatuses) returns Value[] {
+function convertToValues(json[] jsonStatuses) returns Value[] {
     Value[] values = [];
     int i = 0;
-    foreach jsonStatus in jsonStatuses {
+    foreach json jsonStatus in jsonStatuses {
         values[i] = convertValues(jsonStatus);
         i = i + 1;
     }
@@ -95,7 +95,7 @@ function convertValues(json jsonStatus) returns Value {
 function convertToInt(json jsonVal) returns int {
     string stringVal = jsonVal.toString();
     if (stringVal != "") {
-        var value = int.create(stringVal);
+        var value = int.convert(stringVal);
         if (value is int) {
             return value;
         } else {
@@ -108,13 +108,13 @@ function convertToInt(json jsonVal) returns int {
 
 function convertToBoolean(json jsonVal) returns (boolean) {
     string stringVal = jsonVal.toString();
-    return boolean.create(stringVal);
+    return boolean.convert(stringVal);
 }
 
-function convertToArray(json jsonValues) returns string[] {
+function convertToArray(json[] jsonValues) returns string[] {
     string[] serviceTags = [];
     int i = 0;
-    foreach jsonVal in jsonValues {
+    foreach json jsonVal in jsonValues {
         serviceTags[i] = jsonVal.toString();
         i = i + 1;
     }

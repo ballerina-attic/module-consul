@@ -57,7 +57,7 @@ ConsulConfiguration consulConfig = {
 
 Client consulClient = new(consulConfig);
     
-function main(string... args) {
+public function main() {
     
 json jsonPayload = { "ID":"redis", "Name":"redis1", "Address":"localhost", "port":8000, "EnableTagOverride":false };
 var serviceRegister = consulClient->registerService(jsonPayload);
