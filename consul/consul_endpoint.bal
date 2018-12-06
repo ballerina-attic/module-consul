@@ -126,7 +126,7 @@ remote function Client.getCheckByState(string state) returns HealthCheck[]|error
         } else {
             if (statusCode == 200) {
                 checkResponse = convertToHealthClients(<json[]>consulJSONResponse);
-            return checkResponse;
+                return checkResponse;
             } else {
                 return setJsonResponseError(consulJSONResponse);
             }
@@ -261,7 +261,7 @@ remote function Client.deregisterService(string serviceId) returns boolean|error
         } else {
                 var consulStringResponse = httpResponse.getTextPayload();
                 if (consulStringResponse is error) {
-                return consulStringResponse;
+                    return consulStringResponse;
             } else {
                 return setStringResponseError(consulStringResponse);
             }
@@ -285,7 +285,7 @@ remote function Client.deregisterCheck(string checkId) returns boolean|error {
         if (statusCode == 200) {
             return true;
         } else {
-        var consulStringResponse = httpResponse.getTextPayload();
+            var consulStringResponse = httpResponse.getTextPayload();
             if (consulStringResponse is error) {
                 return consulStringResponse;
             } else {
