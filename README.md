@@ -9,7 +9,7 @@ the services, list the details of the check by state such as passing, warning, o
 ## Compatibility
 | Ballerina Language Version | Consul API version  |
 | -------------------------- | ------------------- |
-|  0.983.0                   | v1                  |
+|  0.990.0                   | v1                  |
 
 
 The following sections provide you with information on how to use the Ballerina Consul Connector.
@@ -33,11 +33,13 @@ be returned. Else error will be returned.
 In order for you to use the Consul Connector, first you need to create a Consul Client endpoint.
 
 ```ballerina
-    endpoint consul:Client consulClient {
+    ConsulConfiguration consulConfig = {
          uri: "http://localhost:8500",
          aclToken: "",
          clientConfig: {}
     };
+    
+    Client consulClient = new(consulConfig);
 ```
 
 ##### Example
@@ -47,23 +49,22 @@ import ballerina/io;
 import ballerina/test;
 import wso2/consul;
 
-function main(string... args) {
-    endpoint consul:Client consulClient {
-        uri: "http://localhost:8500",
-        aclToken: "",
-        clientConfig: {}
+ConsulConfiguration consulConfig = {
+     uri: "http://localhost:8500",
+     aclToken: "",
+     clientConfig: {}
 };
+
+Client consulClient = new(consulConfig);
+    
+public function main() {
     
 json jsonPayload = { "ID":"redis", "Name":"redis1", "Address":"localhost", "port":8000, "EnableTagOverride":false };
 var serviceRegister = consulClient->registerService(jsonPayload);
-    match serviceRegister {
-         boolean response => {
-             test:assertEquals(response, true, msg = "Failed to call registerService()");
-         }
-         error err => {
-             io:println(err.message);
-             test:assertFail(msg = err.message);
-         }
-    }
+if (serviceRegister is boolean) {
+    test:assertEquals(serviceRegister, true, msg = "Failed to call registerService()");
+} else {
+    io:println(<string>serviceRegister.detail().message);
+    test:assertFail(msg = <string>serviceRegister.detail().message);
 }
 ```

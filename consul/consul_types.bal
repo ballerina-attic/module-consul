@@ -30,20 +30,20 @@
 # + createIndex - An internal index value representing when the service was created
 # + modifyIndex - Last index that modified the service
 public type CatalogService record {
-    string id;
-    string node;
-    string address;
-    string datacenter;
-    string taggedAddresses;
-    string nodeMeta;
-    string serviceId;
-    string serviceName;
-    string[] serviceTags;
-    string serviceAddress;
-    int servicePort;
-    boolean serviceEnableTagOverride;
-    int createIndex;
-    int modifyIndex;
+    string id = "";
+    string node = "";
+    string address = "";
+    string datacenter = "";
+    string taggedAddresses = "";
+    string nodeMeta = "";
+    string serviceId = "";
+    string serviceName = "";
+    string[] serviceTags = [];
+    string serviceAddress = "";
+    int servicePort = 0;
+    boolean serviceEnableTagOverride = false;
+    int createIndex = 0;
+    int modifyIndex = 0;
 };
 
 # Struct to define the HealthCheck.
@@ -60,18 +60,18 @@ public type CatalogService record {
 # + createIndex - An internal index value representing when the check was created
 # + modifyIndex - Last index that modified the check
 public type HealthCheck record {
-    string node;
-    string checkId;
-    string name;
-    string status;
-    string notes;
-    string output;
-    string serviceId;
-    string serviceName;
-    string[] serviceTags;
-    string definition;
-    int createIndex;
-    int modifyIndex;
+    string node = "";
+    string checkId = "";
+    string name = "";
+    string status = "";
+    string notes = "";
+    string output = "";
+    string serviceId = "";
+    string serviceName = "";
+    string[] serviceTags = [];
+    string definition = "";
+    int createIndex = 0;
+    int modifyIndex = 0;
 };
 
 # Struct to define the Value.
@@ -82,10 +82,20 @@ public type HealthCheck record {
 # + createIndex - An internal index value representing when the entry was created
 # + modifyIndex - Last index that modified the key
 public type Value record {
-    int lockIndex;
-    string key;
-    int flags;
-    string value;
-    int createIndex;
-    int modifyIndex;
+    int lockIndex = 0;
+    string key = "";
+    int flags = 0;
+    string value = "";
+    int createIndex = 0;
+    int modifyIndex = 0;
+};
+
+# Consul Connector configurations can be setup here.
+# + uri -  The Consul API URL
+# + aclToken -  The acl token consul agent
+# + clientConfig -  Client endpoint configurations provided by the user
+public type ConsulConfiguration record {
+    string uri = "";
+    string aclToken = "";
+    http:ClientEndpointConfig clientConfig;
 };
