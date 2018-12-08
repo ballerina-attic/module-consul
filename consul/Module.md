@@ -45,13 +45,13 @@ curl -X PUT http://localhost:8500/v1/acl/bootstrap
 
 You can now enter the token in the Consul client config:
 ```ballerina
-ConsulConfiguration consulConfig = {
+consul:ConsulConfiguration consulConfig = {
     uri: "http://localhost:8500",
     aclToken: "",
     clientConfig: {}
 };
     
-Client consulClient = new(consulConfig);
+consul:Client consulClient = new(consulConfig);
 ```
 
 Register services in Consul with the given `jsonPayload`.

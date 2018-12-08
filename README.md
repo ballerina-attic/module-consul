@@ -33,13 +33,13 @@ be returned. Else error will be returned.
 In order for you to use the Consul Connector, first you need to create a Consul Client endpoint.
 
 ```ballerina
-    ConsulConfiguration consulConfig = {
+    consul:ConsulConfiguration consulConfig = {
          uri: "http://localhost:8500",
          aclToken: "",
          clientConfig: {}
     };
     
-    Client consulClient = new(consulConfig);
+    consul:Client consulClient = new(consulConfig);
 ```
 
 ##### Example
@@ -49,22 +49,22 @@ import ballerina/io;
 import ballerina/test;
 import wso2/consul;
 
-ConsulConfiguration consulConfig = {
+consul:ConsulConfiguration consulConfig = {
      uri: "http://localhost:8500",
      aclToken: "",
      clientConfig: {}
 };
 
-Client consulClient = new(consulConfig);
+consul:Client consulClient = new(consulConfig);
     
 public function main() {
-    
-json jsonPayload = { "ID":"redis", "Name":"redis1", "Address":"localhost", "port":8000, "EnableTagOverride":false };
-var serviceRegister = consulClient->registerService(jsonPayload);
-if (serviceRegister is boolean) {
-    test:assertEquals(serviceRegister, true, msg = "Failed to call registerService()");
-} else {
-    io:println(<string>serviceRegister.detail().message);
-    test:assertFail(msg = <string>serviceRegister.detail().message);
+    json jsonPayload = { "ID":"redis", "Name":"redis1", "Address":"localhost", "port":8000, "EnableTagOverride":false };
+    var serviceRegister = consulClient->registerService(jsonPayload);
+    if (serviceRegister is boolean) {
+        test:assertEquals(serviceRegister, true, msg = "Failed to call registerService()");
+    } else {
+        io:println(<string>serviceRegister.detail().message);
+        test:assertFail(msg = <string>serviceRegister.detail().message);
+    }
 }
 ```
