@@ -38,10 +38,12 @@ import wso2/consul;
 
 **Obtain the ACL Token to Run the Sample**
 
-Obtain the ACL token (required when the ACL bootstrap is enabled in the Consul agent) using the following curl command:
-```shell
-curl -X PUT http://localhost:8500/v1/acl/bootstrap
-```
+1. Install and start the consul server. For more information, see [https://linoxide.com/devops/install-consul-server-ubuntu-16/](https://linoxide.com/devops/install-consul-server-ubuntu-16/) 
+
+2. Obtain the ACL token (required when the ACL bootstrap is enabled in the Consul agent) using the following curl command:
+    ```shell
+    curl -X PUT http://localhost:8500/v1/acl/bootstrap
+    ```
 
 You can now enter the token in the Consul client config:
 ```ballerina
