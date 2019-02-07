@@ -32,51 +32,51 @@ public type Client client object {
     # Get the details of a particular service.
     # + serviceName - The name of the service
     # + return - If success, returns CatalogService object with basic details, else returns error.
-    remote function getService(string serviceName) returns CatalogService[]|error;
+    public remote function getService(string serviceName) returns CatalogService[]|error;
 
     # Get the details of the  passing / critical state checks.
     # + state - The state of the checks
     # + return - If success, returns HealthCheck Object with basic details, else returns error.
-    remote function getCheckByState(string state) returns HealthCheck[]|error;
+    public remote function getCheckByState(string state) returns HealthCheck[]|error;
 
     # Get the details of a particular key.
     # + key - The path of the key to read
     # + return - If success, returns Value Object with basic details, else returns error.
-    remote function readKey(string key) returns Value[]|error;
+    public remote function readKey(string key) returns Value[]|error;
 
     # Register the service.
     # + jsonPayload - The details of the service
     # + return - If success, returns boolean else returns error.
-    remote function registerService(json jsonPayload) returns boolean|error;
+    public remote function registerService(json jsonPayload) returns boolean|error;
 
     # Register the check .
     # + jsonPayload - The details of the check
     # + return - If success, returns boolean else returns error.
-    remote function registerCheck(json jsonPayload) returns boolean|error;
+    public remote function registerCheck(json jsonPayload) returns boolean|error;
 
     # Create the key.
     # + keyName - Name of the key
     # + value - Value of the key
     # + return - If success, returns boolean else returns error.
-    remote function createKey(string keyName, string value) returns boolean|error;
+    public remote function createKey(string keyName, string value) returns boolean|error;
 
     # Deregister the service.
     # + serviceId - The id of the service
     # + return - If success, returns boolean else returns error.
-    remote function deregisterService(string serviceId) returns boolean|error;
+    public remote function deregisterService(string serviceId) returns boolean|error;
 
     # Deregister the check .
     # + checkId - The id of the check
     # + return - If success, returns boolean else returns error.
-    remote function deregisterCheck(string checkId) returns boolean|error;
+    public remote function deregisterCheck(string checkId) returns boolean|error;
 
     # Delete key.
     # + keyName - Name of the key
     # + return - If success, returns boolean else returns error.
-    remote function deleteKey(string keyName) returns boolean|error;
+    public remote function deleteKey(string keyName) returns boolean|error;
 };
 
-remote function Client.getService(string serviceName) returns CatalogService[]|error {
+public remote function Client.getService(string serviceName) returns CatalogService[]|error {
     string consulPath = SERVICE_ENDPOINT + serviceName;
 
     http:Request request = new;
@@ -106,7 +106,7 @@ remote function Client.getService(string serviceName) returns CatalogService[]|e
     }
 }
 
-remote function Client.getCheckByState(string state) returns HealthCheck[]|error {
+public remote function Client.getCheckByState(string state) returns HealthCheck[]|error {
     string consulPath = CHECK_BY_STATE + state;
 
     http:Request request = new;
@@ -134,7 +134,7 @@ remote function Client.getCheckByState(string state) returns HealthCheck[]|error
     }
 }
 
-remote function Client.readKey(string key) returns Value[]|error {
+public remote function Client.readKey(string key) returns Value[]|error {
     string consulPath = KEY_ENDPOINT + key;
 
     http:Request request = new;
@@ -163,7 +163,7 @@ remote function Client.readKey(string key) returns Value[]|error {
     }
 }
 
-remote function Client.registerService(json jsonPayload) returns (boolean|error) {
+public remote function Client.registerService(json jsonPayload) returns (boolean|error) {
     string consulPath = REGISTER_SERVICE_ENDPOINT;
 
     http:Request request = new;
@@ -190,7 +190,7 @@ remote function Client.registerService(json jsonPayload) returns (boolean|error)
     }
 }
 
-remote function Client.registerCheck(json jsonPayload) returns boolean|error {
+public remote function Client.registerCheck(json jsonPayload) returns boolean|error {
     string consulPath = REGISTER_CHECK_ENDPOINT;
 
     http:Request request = new;
@@ -217,7 +217,7 @@ remote function Client.registerCheck(json jsonPayload) returns boolean|error {
     }
 }
 
-remote function Client.createKey(string keyName, string value) returns boolean|error {
+public remote function Client.createKey(string keyName, string value) returns boolean|error {
     string consulPath = KEY_ENDPOINT + keyName;
 
     http:Request request = new;
@@ -243,7 +243,7 @@ remote function Client.createKey(string keyName, string value) returns boolean|e
     }
 }
 
-remote function Client.deregisterService(string serviceId) returns boolean|error {
+public remote function Client.deregisterService(string serviceId) returns boolean|error {
     string consulPath = DEREGISTER_SERVICE_ENDPOINT + serviceId;
 
     http:Request request = new;
@@ -269,7 +269,7 @@ remote function Client.deregisterService(string serviceId) returns boolean|error
     }
 }
 
-remote function Client.deregisterCheck(string checkId) returns boolean|error {
+public remote function Client.deregisterCheck(string checkId) returns boolean|error {
     string consulPath = DEREGISTER_CHECK_ENDPOINT + checkId;
 
     http:Request request = new;
@@ -295,7 +295,7 @@ remote function Client.deregisterCheck(string checkId) returns boolean|error {
     }
 }
 
-remote function Client.deleteKey(string keyName) returns boolean|error {
+public remote function Client.deleteKey(string keyName) returns boolean|error {
     string consulPath = KEY_ENDPOINT + keyName;
 
     http:Request request = new;
