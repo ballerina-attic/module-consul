@@ -61,10 +61,9 @@ public function main() {
     json jsonPayload = { "ID":"redis", "Name":"redis1", "Address":"localhost", "port":8000, "EnableTagOverride":false };
     var serviceRegister = consulClient->registerService(jsonPayload);
     if (serviceRegister is boolean) {
-        test:assertEquals(serviceRegister, true, msg = "Failed to call registerService()");
+        io:println("Status of the service: ", serviceRegister);
     } else {
-        io:println(<string>serviceRegister.detail().message);
-        test:assertFail(msg = <string>serviceRegister.detail().message);
+        io:println("Error: ", <string>serviceRegister.detail().message);
     }
 }
 ```
