@@ -58,11 +58,12 @@ consul:Client consulClient = new(consulConfig);
 
 Register services in Consul with the given `jsonPayload`.
 ```ballerina
-var serviceRegister = consulClient->registerService(jsonPayload);
-if (serviceRegister is boolean) {
-   io:println(serviceRegister);
+json jsonPayload = { "ID": "redis", "Name": "redis1", "Address": "localhost", "port": 8000, "EnableTagOverride": false };
+var serviceRegistrationResponse = consulClient->registerService(jsonPayload);
+if (serviceRegistrationResponse is boolean) {
+   io:println("Status of service registration: ", serviceRegistrationResponse);
 } else {
-   io:println(<string>serviceRegister.detail().message);
+   io:println("Error: ", <string>serviceRegistrationResponse.detail().message);
 }
 ```
 
@@ -70,39 +71,39 @@ Get the details of the service with the given `serviceName`.
 ```ballerina
 var serviceDetails = consulClient->getService(serviceName);
 if (serviceDetails is consul:CatalogService[]) {
-   io:println(serviceDetails);
+   io:println("Details of the service: ", serviceDetails);
 } else {
-   io:println(<string>serviceDetails.detail().message);
+   io:println("Error: ", <string>serviceDetails.detail().message);
 }
 ```
 
 Register a check in Consul with the given `jsonCheck`.
 ```ballerina
-var checkRegister = consulClient->registerCheck(jsonCheck);
-if (checkRegister is boolean) {
-   io:println(checkRegister);
+var checkRegistrationResponse = consulClient->registerCheck(jsonCheck);
+if (checkRegistrationResponse is boolean) {
+   io:println("Status of the check registration: ", checkRegistrationResponse);
 } else {
-   io:println(<string>checkRegister.detail().message);
+   io:println("Error: ", <string>checkRegistrationResponse.detail().message);
 }
 ```
 
 Get the details of checks with the given `state`.
 ```ballerina
-var checkDetails = consulClient->getCheckByState(state);
-if (checkDetails is consul:HealthCheck[]) {
-   io:println(checkDetails);
+var checkStateResponse = consulClient->getCheckByState(state);
+if (checkStateResponse is consul:HealthCheck[]) {
+   io:println("Details of checks by state: ", checkStateResponse);
 } else {
-   io:println(<string>checkDetails.detail().message);
+   io:println("Error: ", <string>checkStateResponse.detail().message);
 }
 ```
 
 Create the entry in Consul with the given `keyName` and `value`.
 ```ballerina
-var keyRegister = consulClient->createKey(keyName, value);
-if (keyRegister is boolean) {
-   io:println(keyRegister);
+var keyCreationResponse = consulClient->createKey(keyName, value);
+if (keyCreationResponse is boolean) {
+   io:println("Status of the key creation: ", keyCreationResponse);
 } else {
-   io:println(<string>keyRegister.detail().message);
+   io:println("Error: ", <string>keyCreationResponse.detail().message);
 }
 ```
 
@@ -110,38 +111,38 @@ Read the key in Consul with the given `key`.
 ```ballerina
 var keyValue = consulClient->readKey(key);
 if (keyValue is consul:Value[]) {
-   io:println(keyValue);
+   io:println("Details of the key: ", keyValue);
 } else {
-   io:println(<string>keyValue.detail().message);
+   io:println("Error: ", <string>keyValue.detail().message);
 }
 ```
 
 Deregister services with the given `serviceId`.
 ```ballerina
-var serviceDeregister = consulClient->deregisterService(serviceId);
-if (serviceDeregister is boolean) {
-   io:println(serviceDeregister);
+var serviceDeregisterResponse = consulClient->deregisterService(serviceId);
+if (serviceDeregisterResponse is boolean) {
+   io:println("Status of service deregistration: ", serviceDeregisterResponse);
 } else {
-   io:println(<string>serviceDeregister.detail().message);
+   io:println("Error: ", <string>serviceDeregisterResponse.detail().message);
 }
 ```
 
 Deregister checks with the given `checkId`.
 ```ballerina
-var checkDeregister = consulClient->deregisterCheck(checkId);
-if (checkDeregister is boolean) {
-   io:println(checkDeregister);
+var checkDeregisterResponse = consulClient->deregisterCheck(checkId);
+if (checkDeregisterResponse is boolean) {
+   io:println("Status of check deregistration: ", checkDeregisterResponse);
 } else {
-   io:println(<string>checkDeregister.detail().message);
+   io:println("Error: ", <string>checkDeregisterResponse.detail().message);
 }
 ```
 
 Delete entries with the given `keyName`.
 ```ballerina
-var deleteKey = consulClient->deleteKey(keyName);
-if (deleteKey is boolean) {
-   io:println(deleteKey);
+var keyDeletionResponse = consulClient->deleteKey(keyName);
+if (keyDeletionResponse is boolean) {
+   io:println("Status of the key deletion: ", keyDeletionResponse);
 } else {
-   io:println(<string>deleteKey.detail().message);
+   io:println("Error: ", <string>keyDeletionResponse.detail().message);
 }
 ```

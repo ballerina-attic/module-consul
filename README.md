@@ -59,12 +59,11 @@ consul:Client consulClient = new(consulConfig);
     
 public function main() {
     json jsonPayload = { "ID":"redis", "Name":"redis1", "Address":"localhost", "port":8000, "EnableTagOverride":false };
-    var serviceRegister = consulClient->registerService(jsonPayload);
-    if (serviceRegister is boolean) {
-        test:assertEquals(serviceRegister, true, msg = "Failed to call registerService()");
+    var serviceRegistrationResponse = consulClient->registerService(jsonPayload);
+    if (serviceRegistrationResponse is boolean) {
+        io:println("Status of service registration: ", serviceRegistrationResponse);
     } else {
-        io:println(<string>serviceRegister.detail().message);
-        test:assertFail(msg = <string>serviceRegister.detail().message);
+        io:println("Error: ", <string>serviceRegistrationResponse.detail().message);
     }
 }
 ```
