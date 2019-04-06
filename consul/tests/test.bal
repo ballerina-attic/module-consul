@@ -54,7 +54,7 @@ function testGetService() {
         io:println(<string>serviceDetails.detail().message);
         test:assertFail(msg = <string>serviceDetails.detail().message);
     } else {
-        test:assertNotEquals(serviceDetails, null, msg = "Failed to call getService()");
+        test:assertNotEquals(serviceDetails, (), msg = "Failed to call getService()");
     }
 }
 
@@ -105,7 +105,7 @@ function testGetCheckByState() {
         io:println(<string>checkDetails.detail().message);
         test:assertFail(msg = <string>checkDetails.detail().message);
     } else {
-        test:assertNotEquals(checkDetails, null, msg = "Failed to call getCheckByState()");
+        test:assertNotEquals(checkDetails, (), msg = "Failed to call getCheckByState()");
     }
 }
 
@@ -149,7 +149,7 @@ function testReadKey() {
         io:println(<string>keyValue.detail().message);
         test:assertFail(msg = <string>keyValue.detail().message);
     } else {
-        test:assertNotEquals(keyValue, null, msg = "Failed to call readKey()");
+        test:assertNotEquals(keyValue, (), msg = "Failed to call readKey()");
     }
 }
 
