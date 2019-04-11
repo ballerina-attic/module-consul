@@ -29,7 +29,7 @@
 # + serviceEnableTagOverride - Indicates whether service tags can be overridden on this service
 # + createIndex - An internal index value representing when the service was created
 # + modifyIndex - Last index that modified the service
-public type CatalogService record {|
+public type CatalogService record {
     string id = "";
     string node = "";
     string address = "";
@@ -44,7 +44,7 @@ public type CatalogService record {|
     boolean serviceEnableTagOverride = false;
     int createIndex = 0;
     int modifyIndex = 0;
-|};
+};
 
 # Struct to define the HealthCheck.
 # + node - Name or ID of the node
@@ -59,7 +59,7 @@ public type CatalogService record {|
 # + definition - Definition of the check
 # + createIndex - An internal index value representing when the check was created
 # + modifyIndex - Last index that modified the check
-public type HealthCheck record {|
+public type HealthCheck record {
     string node = "";
     string checkId = "";
     string name = "";
@@ -72,7 +72,7 @@ public type HealthCheck record {|
     string definition = "";
     int createIndex = 0;
     int modifyIndex = 0;
-|};
+};
 
 # Struct to define the Value.
 # + lockIndex - The number of times this key has successfully been acquired in a lock
@@ -81,21 +81,21 @@ public type HealthCheck record {|
 # + value - A base64-encoded blob of data.
 # + createIndex - An internal index value representing when the entry was created
 # + modifyIndex - Last index that modified the key
-public type Value record {|
+public type Value record {
     int lockIndex = 0;
     string key = "";
     int flags = 0;
     string value = "";
     int createIndex = 0;
     int modifyIndex = 0;
-|};
+};
 
 # Consul Connector configurations can be setup here.
 # + uri -  The Consul API URL
 # + aclToken -  The acl token consul agent
 # + clientConfig -  Client endpoint configurations provided by the user
-public type ConsulConfiguration record {|
+public type ConsulConfiguration record {
     string uri = "";
     string aclToken = "";
     http:ClientEndpointConfig clientConfig;
-|};
+};
