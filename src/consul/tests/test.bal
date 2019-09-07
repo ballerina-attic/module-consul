@@ -29,17 +29,18 @@ ConsulConfiguration consulConfig = {
 
 Client consulClient = new(consulConfig);
 
-@test:Config
+@test:Config {
+}
 function testRegisterService() {
     io:println("--------------Calling registerService----------------");
     json jsonPayload = {"ID":"redis", "Name":"redis1", "Address":"localhost", "port":8000, "EnableTagOverride":false};
-    var serviceRegister = consulClient->registerService(jsonPayload);
+    boolean|error serviceRegister = consulClient->registerService(jsonPayload);
 
     if (serviceRegister is boolean) {
         test:assertEquals(serviceRegister, true, msg = "Failed to call registerService()");
     } else {
-        io:println(<string>serviceRegister.detail().message);
-        test:assertFail(msg = <string>serviceRegister.detail().message);
+        string? val = serviceRegister.detail()?.message;
+        test:assertFail(msg = (val is string)? val: "failed to register service call!" );
     }
 }
 
@@ -51,8 +52,8 @@ function testGetService() {
     string serviceName = "redis1";
     var serviceDetails = consulClient->getService(serviceName);
     if (serviceDetails is error) {
-        io:println(<string>serviceDetails.detail().message);
-        test:assertFail(msg = <string>serviceDetails.detail().message);
+        string? val = serviceDetails.detail()?.message;
+        test:assertFail(msg = (val is string)? val: "failed to get service details!" );
     } else {
         test:assertTrue(serviceDetails.length() > 0, msg = "Failed to call getService()");
     }
@@ -68,12 +69,12 @@ function testDeregisterService() {
     if (serviceDeregister is boolean) {
         test:assertEquals(serviceDeregister, true, msg = "Failed to call deregisterService()");
     } else {
-        io:println(<string>serviceDeregister.detail().message);
-        test:assertFail(msg = <string>serviceDeregister.detail().message);
+        string? val = serviceDeregister.detail()?.message;
+        test:assertFail(msg = (val is string)? val: "failed to test service deregister!" );
     }
 }
 
-@test:Config
+@test:Config {}
 function testRegisterCheck() {
     io:println("--------------Calling registerCheck----------------");
     json jsonCheck = {"ID":"mem", "Name":"Memory utilization", "Notes":"Ensure we don't oversubscribe memory",
@@ -88,8 +89,8 @@ function testRegisterCheck() {
     if (checkRegister is boolean) {
         test:assertEquals(checkRegister, true, msg = "Failed to call registerCheck()");
     } else {
-        io:println(<string>checkRegister.detail().message);
-        test:assertFail(msg = <string>checkRegister.detail().message);
+        string? val = checkRegister.detail()?.message;
+        test:assertFail(msg = (val is string)? val: "failed to test register Check!" );
     }
 }
 
@@ -102,8 +103,8 @@ function testGetCheckByState() {
     string state = "passing";
     var checkDetails = consulClient->getCheckByState(state);
     if (checkDetails is error) {
-        io:println(<string>checkDetails.detail().message);
-        test:assertFail(msg = <string>checkDetails.detail().message);
+        string? val = checkDetails.detail()?.message;
+        test:assertFail(msg = (val is string)? val: "failed to test getCheckByState!" );
     } else {
         test:assertTrue(checkDetails.length() > 0, msg = "Failed to call getCheckByState()");
     }
@@ -119,12 +120,12 @@ function testDeregisterCheck() {
     if (checkDeregister is boolean) {
         test:assertEquals(checkDeregister, true, msg = "Failed to call deregisterCheck()");
     } else {
-        io:println(<string>checkDeregister.detail().message);
-        test:assertFail(msg = <string>checkDeregister.detail().message);
+        string? val = checkDeregister.detail()?.message;
+        test:assertFail(msg = (val is string)? val: "failed to test deregisterCheck!" );
     }
 }
 
-@test:Config
+@test:Config {}
 function testCreateKey() {
     io:println("--------------Calling createKey----------------");
     string keyName = "foo";
@@ -133,8 +134,8 @@ function testCreateKey() {
     if (keyRegister is boolean) {
         test:assertEquals(keyRegister, true, msg = "Failed to call createKey()");
     } else {
-        io:println(<string>keyRegister.detail().message);
-        test:assertFail(msg = <string>keyRegister.detail().message);
+        string? val = keyRegister.detail()?.message;
+        test:assertFail(msg = (val is string)? val: "failed to call createKey!" );
     }
 }
 
@@ -146,8 +147,8 @@ function testReadKey() {
     string key = "foo";
     var keyValue = consulClient->readKey(key);
     if (keyValue is error) {
-        io:println(<string>keyValue.detail().message);
-        test:assertFail(msg = <string>keyValue.detail().message);
+        string? val = keyValue.detail()?.message;
+        test:assertFail(msg = (val is string)? val: "failed to call readKey!" );
     } else {
         test:assertTrue(keyValue.length() > 0, msg = "Failed to call readKey()");
     }
@@ -161,9 +162,9 @@ function testDeleteKey() {
     string keyName = "foo";
     var deleteKey = consulClient->deleteKey(keyName);
     if (deleteKey is boolean) {
-        test:assertEquals(deleteKey, true, msg = "Failed to call createKey()");
+        test:assertEquals(deleteKey, true, msg = "Failed to call deleteKey()");
     } else {
-        io:println(<string>deleteKey.detail().message);
-        test:assertFail(msg = <string>deleteKey.detail().message);
+        string? val = deleteKey.detail()?.message;
+        test:assertFail(msg = (val is string)? val: "failed to call deleteKey!" );
     }
 }

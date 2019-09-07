@@ -13,6 +13,7 @@
 // KIND, either express or implied.  See the License for the
 // specific language governing permissions and limitations
 // under the License.
+import ballerina/http;
 
 # Struct to define the CatalogService.
 # + id - UUID assigned to the service
@@ -97,5 +98,5 @@ public type Value record {
 public type ConsulConfiguration record {
     string uri = "";
     string aclToken = "";
-    http:ClientEndpointConfig clientConfig;
+    http:ClientConfiguration clientConfig;
 };
