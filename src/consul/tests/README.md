@@ -7,27 +7,31 @@ or critical etc.
 ## Compatibility
 | Ballerina Language Version | Consul API version  |
 | -------------------------- | ------------------- |
-|  0.991.0                   | v1                  |
+|  1.0.0                     | v1                  |
 
 
 ### Running tests
 
-1. Install and start the consul server. For more information, see [https://linoxide.com/devops/install-consul-server-ubuntu-16/](https://linoxide.com/devops/install-consul-server-ubuntu-16/) 
+1. Install the consul server. You can download consul API ver 1.0.0 from [https://releases.hashicorp.com/consul/1.0.0/](https://releases.hashicorp.com/consul/1.0.0/). 
 
-2. Obtain the ACL token (required when the ACL bootstrap is enabled in the Consul agent) using the following curl command:
+2. Enable ACLs on the consul server. You can make use of the config.json from [https://www.consul.io/docs/acl/acl-legacy.html#bootstrapping-acls](https://www.consul.io/docs/acl/acl-legacy.html#bootstrapping-acls)  
+
+3. Obtain the ACL token (required when the ACL bootstrap is enabled in the Consul agent) using the following curl command:
    ```shell
    curl -X PUT http://localhost:8500/v1/acl/bootstrap
    ```
-3. Create `ballerina.conf` file in `module-consul`, with following keys and provide values for the variables.
+   or you can simple make use of the `acl_master_token` provided in the config.json.
+
+4. Create `ballerina.conf` file in `module-consul`, with following keys and provide values for the variables.
 
     ```.conf
     URI=""
     ACL_TOKEN=""
     ```
 
-4. Navigate to the folder module-consul
+5. Navigate to the folder module-consul
 
-5. Run tests :
+6. Run tests :
 
     ```shell
     ballerina init

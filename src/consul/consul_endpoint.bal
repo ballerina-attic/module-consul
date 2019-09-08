@@ -21,8 +21,8 @@ import ballerina/http;
 # + consulClient - HTTP client endpoint
 public type Client client object {
 
-    public string aclToken;
-    public http:Client consulClient;
+    private string aclToken;
+    private http:Client consulClient;
 
     public function __init(ConsulConfiguration consulConfig) {
         self.consulClient = new (consulConfig.uri, config = consulConfig.clientConfig);
@@ -40,32 +40,28 @@ public type Client client object {
             request.setHeader(CONSUL_TOKEN_HEADER, self.aclToken);
         }
 
-        var httpResponse = self.consulClient->get(consulPath, message = request);
+        var httpResponse = check self.consulClient->get(consulPath, message = request);
         CatalogService[] serviceResponse = [];
-
-        if (httpResponse is error) {
-            return httpResponse;
+            
+        int statusCode = httpResponse.statusCode;
+        json|error consulJsonResponse = httpResponse.getJsonPayload();
+        
+        if (consulJsonResponse is error) {
+            return consulJsonResponse;
         } else {
-            int statusCode = httpResponse.statusCode;
-            json|error consulJsonResponse = httpResponse.getJsonPayload();
-            if (consulJsonResponse is error) {
-                return consulJsonResponse;
+            if (statusCode == 200) {
+                serviceResponse = convertToCatalogServices(<json[]>consulJsonResponse);
+                return serviceResponse;
             } else {
-                if (statusCode == 200) {
-                    serviceResponse = convertToCatalogServices(<json[]>consulJsonResponse);
-                    return serviceResponse;
+                map<json>|error jsonMap = map<json>.constructFrom(consulJsonResponse);
+                if (jsonMap is error) {
+                    return jsonMap; 
                 } else {
-                    map<json>|error jsonMap = map<json>.constructFrom(consulJsonResponse);
-                    if (jsonMap is error) {
-                        return jsonMap; 
-                    } else {
-                        json[] errors = <json[]>jsonMap["errors"];
-                        map<json> e = <map<json>>errors[0];
-                        error err = error(CONSUL_ERROR_CODE, message = e["message"].toString());
-                        return err;
-                    }
-                    
-                }
+                    json[] errors = <json[]>jsonMap["errors"];
+                    map<json> e = <map<json>>errors[0];
+                    error err = error(CONSUL_ERROR_CODE, message = e["message"].toString());
+                    return err;
+                }        
             }
         }
     }

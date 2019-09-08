@@ -39,8 +39,7 @@ function testRegisterService() {
     if (serviceRegister is boolean) {
         test:assertEquals(serviceRegister, true, msg = "Failed to call registerService()");
     } else {
-        string? val = serviceRegister.detail()?.message;
-        test:assertFail(msg = (val is string)? val: "failed to register service call!" );
+       test:assertFail(msg = serviceRegister.detail()?.message ?: "failed to register service call!" );
     }
 }
 

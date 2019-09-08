@@ -96,21 +96,15 @@ function convertValues(json jsonStatus) returns Value {
 }
 
 function convertToInt(json|error jsonVal) returns int {
-    if (jsonVal is json ) {
-        string stringVal = jsonVal.toString();
-        if (stringVal != "") {
-            var value = ints:fromString(stringVal);
-            if (value is int) {
-                return value;
-            } else {
-                return 0;
-            }
-        } else {
-            return 0;
-        }
-    } else {
-        return 0;
+    if (jsonVal is int) {
+        return jsonVal;
+    } else if (jsonVal is float|decimal) {
+        return <int> jsonVal;
+    } else if (jsonVal is string) {
+        var value = ints:fromString(jsonVal);
+        return value is int ? value : 0;
     }
+    return 0;
 }
 
 function convertToBoolean(json|error jsonVal) returns boolean {
