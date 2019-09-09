@@ -14,6 +14,9 @@
 // specific language governing permissions and limitations
 // under the License.
 
+import ballerina/'lang\.int as ints;
+import ballerinax/java;
+
 function convertToCatalogService(json jsonStatus) returns (CatalogService) {
     CatalogService catalogService = {};
     catalogService.id = jsonStatus.ID != null ? jsonStatus.ID.toString() : "";
@@ -92,23 +95,26 @@ function convertValues(json jsonStatus) returns Value {
     return value;
 }
 
-function convertToInt(json jsonVal) returns int {
-    string stringVal = jsonVal.toString();
-    if (stringVal != "") {
-        var value = int.convert(stringVal);
-        if (value is int) {
-            return value;
-        } else {
-            return 0;
-        }
-    } else {
-        return 0;
+function convertToInt(json|error jsonVal) returns int {
+    if (jsonVal is int) {
+        return jsonVal;
+    } else if (jsonVal is float|decimal) {
+        return <int> jsonVal;
+    } else if (jsonVal is string) {
+        var value = ints:fromString(jsonVal);
+        return value is int ? value : 0;
     }
+    return 0;
 }
 
-function convertToBoolean(json jsonVal) returns (boolean) {
-    string stringVal = jsonVal.toString();
-    return boolean.convert(stringVal);
+function convertToBoolean(json|error jsonVal) returns boolean {
+    if (jsonVal is json) {
+        string stringVal = jsonVal.toString();
+        return getBoolean(java:fromString(stringVal));
+    } else {
+        return false;
+    }
+
 }
 
 function convertToArray(json[] jsonValues) returns string[] {
@@ -120,3 +126,8 @@ function convertToArray(json[] jsonValues) returns string[] {
     }
     return serviceTags;
 }
+
+function getBoolean(handle value) returns boolean = @java:Method {
+    name: "parseBoolean",
+    class: "java.lang.Boolean"
+} external;
