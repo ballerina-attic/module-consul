@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/wso2-ballerina/module-consul.svg?branch=master)](https://travis-ci.org/wso2-ballerina/module-consul)
 # Ballerina Consul Connector
 
 ## Module Overview
